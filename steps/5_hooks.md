@@ -1,89 +1,89 @@
-# Step 5 — Hooks
+# Passo 5 — Hooks (Automações do Agente)
 
-> **Goal:** Set up event-driven automation with Agent Hooks. Create hooks that lint on save, verify accessibility before file writes, and run the build after spec tasks complete.
-
----
-
-## 5.1 — Why Hooks?
-
-In Step 4 you taught Kiro your conventions with Steering. But conventions only work if they're enforced. Right now, nothing stops Kiro (or you) from writing code that breaks the rules.
-
-Hooks close that gap. They're automated triggers that fire when something happens in the IDE — a file is saved, a tool is about to run, a spec task finishes. When the trigger fires, Kiro either runs a shell command or sends itself a prompt.
-
-Think of hooks as CI/CD for your editor. Instead of waiting for a pipeline to catch problems after you push, hooks catch them _while you're working_.
+> **Objetivo:** Configurar automações orientadas a eventos com os Agent Hooks. Criar hooks para verificar lint ao salvar, auditar acessibilidade antes de escrever arquivos e rodar a compilação (*build*) após a conclusão de tarefas de especificação.
 
 ---
 
-## 5.2 — How Hooks Work
+## 5.1 — Por que usar Hooks?
 
-Every hook has two parts:
+No Passo 4 você ensinou suas convenções ao Kiro com o Steering. Mas convenções só funcionam se forem aplicadas de verdade. Até agora, nada impedia o Kiro (ou você) de escrever código que violasse as regras estabelecidas.
 
-1. **When** — The event that triggers it
-2. **Then** — The action to take
+Os Hooks resolvem esse problema. Eles são gatilhos automatizados disparados quando eventos acontecem na IDE — um arquivo é salvo, uma ferramenta está prestes a rodar, uma tarefa de spec é concluída. Ao disparar o gatilho, o Kiro executa um comando shell ou envia um prompt para si mesmo.
 
-### Trigger events
-
-| Event               | Fires when...                                                 |
-| ------------------- | ------------------------------------------------------------- |
-| `fileEdited`        | You save a file                                               |
-| `fileCreated`       | A new file is created                                         |
-| `fileDeleted`       | A file is deleted                                             |
-| `promptSubmit`      | You send a message to the agent                               |
-| `agentStop`         | The agent finishes a turn                                     |
-| `preToolUse`        | Before Kiro is about to use a tool (read, write, shell, etc.) |
-| `postToolUse`       | After Kiro uses a tool                                        |
-| `preTaskExecution`  | Before a spec task starts                                     |
-| `postTaskExecution` | After a spec task completes                                   |
-| `userTriggered`     | You click a manual trigger button                             |
-
-### Actions
-
-| Action       | What it does                                            |
-| ------------ | ------------------------------------------------------- |
-| `askAgent`   | Sends a prompt to Kiro — Kiro reads it and acts on it   |
-| `runCommand` | Executes a shell command — output is captured and shown |
+Pense nos hooks como uma esteira de CI/CD integrada ao seu editor. Em vez de esperar uma pipeline acusar falhas após o push, os hooks identificam e corrigem problemas *enquanto você programa*.
 
 ---
 
-## 5.3 — Creating Hooks
+## 5.2 — Como os Hooks Funcionam
 
-There are three ways to create a hook:
+Cada hook é composto por duas partes:
 
-### 1. Ask Kiro (natural language)
+1. **Quando (*When*)** — O evento disparador
+2. **Então (*Then*)** — A ação que deve ser executada
 
-1. Open the **Agent Hooks** section in the Kiro panel
-2. Click `+`
-3. Select **Ask Kiro to create a hook**
-4. Describe what you want: "Run the linter every time I save a TypeScript file"
-5. Review the generated config and click **Save Hook**
+### Eventos Disparadores
 
-### 2. Manual form
+| Evento | É disparado quando... |
+| :--- | :--- |
+| `fileEdited` | Você salva um arquivo existente |
+| `fileCreated` | Um novo arquivo é criado |
+| `fileDeleted` | Um arquivo é excluído |
+| `promptSubmit` | Você envia uma mensagem para o agente |
+| `agentStop` | O agente conclui uma iteração/resposta |
+| `preToolUse` | Antes de o Kiro usar uma ferramenta (leitura, escrita, terminal, etc.) |
+| `postToolUse` | Logo após o Kiro executar uma ferramenta |
+| `preTaskExecution` | Antes de iniciar uma tarefa da spec |
+| `postTaskExecution` | Logo após concluir uma tarefa da spec |
+| `userTriggered` | Você clica manualmente em um botão de disparo |
 
-1. Click `+` → **Manually create a hook**
-2. Fill in: title, description, event type, file patterns or tool types, action, and the prompt or command
-3. Click **Create Hook**
+### Ações Disponíveis
 
-### 3. Command Palette
-
-`Cmd+Shift+P` → "Kiro: Open Kiro Hook UI"
-
-For this workshop, use the natural language approach — it's faster and shows off Kiro's ability to generate hook configs from plain English.
+| Ação | O que faz |
+| :--- | :--- |
+| `askAgent` | Envia um prompt para o próprio Kiro — o Kiro o interpreta e toma providências |
+| `runCommand` | Executa um comando shell no terminal — o output é capturado e apresentado |
 
 ---
 
-## 5.4 — Hook 1: Build on Save
+## 5.3 — Criando Hooks
 
-Let's start simple. You want to run the TypeScript compiler every time you save a `.ts` or `.tsx` file to catch type errors immediately.
+Existem três maneiras de criar um hook:
 
-### What to say
+### 1. Pedindo ao Kiro (Linguagem Natural)
 
-In the hook creation dialog:
+1. Abra a seção **Agent Hooks** no painel do Kiro.
+2. Clique no ícone `+`.
+3. Selecione **Ask Kiro to create a hook**.
+4. Descreva seu objetivo: "Execute o linter sempre que eu salvar um arquivo TypeScript".
+5. Revise a configuração em JSON gerada e clique em **Save Hook**.
 
+### 2. Formulário Manual
+
+1. Clique em `+` → **Manually create a hook**.
+2. Preencha os campos: título, descrição, tipo de evento, padrões de arquivo ou tipos de ferramenta, tipo de ação e o comando/prompt.
+3. Clique em **Create Hook**.
+
+### 3. Pela Paleta de Comandos
+
+Pressione `Cmd+Shift+P` (ou `Ctrl+Shift+P`) → "Kiro: Open Kiro Hook UI".
+
+Para este workshop, use a abordagem em linguagem natural — ela é mais rápida e demonstra a capacidade do Kiro em converter solicitações em configurações operacionais.
+
+---
+
+## 5.4 — Hook 1: Build ao Salvar (Build on Save)
+
+Vamos começar de forma direta: executar o compilador TypeScript sempre que você salvar um arquivo `.ts` ou `.tsx` para capturar erros de tipagem instantaneamente.
+
+### O que solicitar
+
+Na janela de criação de hook:
+
+```text
+Execute "npm run build" sempre que um arquivo TypeScript for salvo.
 ```
-Run "npm run build" every time a TypeScript file is saved.
-```
 
-### What Kiro generates
+### O que o Kiro gera
 
 ```json
 {
@@ -101,36 +101,36 @@ Run "npm run build" every time a TypeScript file is saved.
 }
 ```
 
-### What to notice
+### Pontos para prestar atenção
 
-- The hook is a simple JSON file stored in `.kiro/hooks/`
-- `fileEdited` + `patterns` means it only fires for TypeScript files, not every save
-- `runCommand` runs the build in the background — you see the output but it doesn't block your work
-- If the build fails, you'll see the errors immediately
+- O hook é salvo como um arquivo JSON limpo dentro de `.kiro/hooks/`.
+- A combinação `fileEdited` + `patterns` garante que o gatilho só dispare para arquivos TypeScript, e não a cada salvamento irrelevante.
+- `runCommand` roda o build em segundo plano — a saída aparece na tela sem bloquear seu fluxo de trabalho.
+- Se o build quebrar, o erro é exibido imediatamente.
 
-### See it fire
+### Veja o hook funcionando
 
-Make a small change to a `.ts` file — add a type error on purpose (like assigning a string to a number). Save the file. Watch the hook fire and the build fail with a clear error message.
+Faça uma pequena alteração em um arquivo `.ts` — introduza propositalmente um erro de tipagem (como atribuir uma string a uma variável numérica). Salve o arquivo. Observe o hook disparar e o build acusar o erro detalhado.
 
-Fix the error, save again, and the build passes. Instant feedback loop.
+Corrija o código, salve novamente e veja o build passar com sucesso. Ciclo de feedback instantâneo.
 
-If the hook doesn't run, ask Kiro to help!
+Caso o hook não dispare, peça auxílio diretamente ao Kiro pelo chat!
 
 ---
 
-## 5.5 — Hook 2: Accessibility Review on Write
+## 5.5 — Hook 2: Auditoria de Acessibilidade na Escrita
 
-This one's more interesting. You want Kiro to review every file it writes for accessibility issues _before_ the write happens.
+Este exemplo é mais avançado: fazer o Kiro revisar cada arquivo que ele escreve para buscar problemas de acessibilidade *antes* de confirmar a alteração no disco.
 
-### What to say
+### O que solicitar
 
+```text
+Antes de o Kiro gravar qualquer arquivo, revise as alterações em busca de falhas de acessibilidade —
+rótulos aria ausentes, HTML não-semântico, falhas de navegação por teclado.
+Se houver problemas, corrija-os antes de gravar o arquivo.
 ```
-Before Kiro writes any file, review the changes for accessibility issues —
-missing aria labels, non-semantic HTML, keyboard navigation gaps.
-If there are problems, fix them before writing.
-```
 
-### What Kiro generates
+### O que o Kiro gera
 
 ```json
 {
@@ -148,32 +148,32 @@ If there are problems, fix them before writing.
 }
 ```
 
-### What to notice
+### Pontos para prestar atenção
 
-- `preToolUse` fires _before_ Kiro writes — it's a gate, not a post-check
-- `toolTypes: ["write"]` targets only write operations (not reads, shell commands, etc.)
-- `askAgent` sends a prompt to Kiro itself — Kiro reviews its own work before committing it
-- This is like having an accessibility reviewer built into your workflow
+- O evento `preToolUse` atua *antes* da gravação do arquivo — operando como uma barreira de qualidade prévia, e não uma checagem posterior.
+- `toolTypes: ["write"]` atinge apenas ações de escrita em disco (ignorando leituras e comandos de terminal).
+- `askAgent` envia uma instrução para o próprio Kiro — fazendo com que ele audite a própria entrega antes de salvar.
+- Funciona como ter um auditor de acessibilidade acoplado ao fluxo de código.
 
-### See it fire
+### Veja o hook funcionando
 
-Ask Kiro to add a new UI element — maybe a settings button or a player name input. Watch the hook fire before the file write. Kiro will review the code for accessibility and fix any issues before saving.
+Peça ao Kiro para criar um novo componente visual — por exemplo, um botão de configurações ou um input para os nomes dos jogadores. Veja o hook disparar antes do arquivo ser salvo. O Kiro analisa o código sob a ótica da acessibilidade e corrige inconsistências antes de gravar.
 
-If you want to make it dramatic, ask Kiro to create a component with a `<div onClick={...}>` and watch the hook catch it and replace it with a `<button>`.
+Para testar de forma evidente, peça para ele criar um elemento interativo usando `<div onClick={...}>` e observe o hook interceptar a gravação e substituir pela tag semântica `<button>`.
 
 ---
 
-## 5.6 — Hook 3: Run Build After Spec Tasks
+## 5.6 — Hook 3: Build após Tarefas da Spec
 
-When you're executing spec tasks (from Step 2), you want to make sure each completed task doesn't break the build.
+Ao trabalhar em tarefas estruturadas de uma spec (como visto no Passo 2), queremos assegurar que nenhuma tarefa concluída quebre a compilação do projeto.
 
-### What to say
+### O que solicitar
 
+```text
+Após a conclusão de cada tarefa da spec, execute o build para verificar se nada foi quebrado.
 ```
-After each spec task completes, run the build to verify nothing is broken.
-```
 
-### What Kiro generates
+### O que o Kiro gera
 
 ```json
 {
@@ -190,51 +190,51 @@ After each spec task completes, run the build to verify nothing is broken.
 }
 ```
 
-### What to notice
+### Pontos para prestar atenção
 
-- `postTaskExecution` ties into the Spec workflow from Step 2
-- Every time a task is marked complete, the build runs automatically
-- If a task breaks something, you know immediately — not three tasks later
-- This is especially valuable when running all tasks at once in Autopilot mode
-
----
-
-## 5.7 — Review What Changed: `#git diff`
-
-You've been creating hooks and making changes. Let's pause and review everything that's changed using the `#git diff` context provider.
-
-In the chat, type:
-
-```
-#git diff What have I changed in this step? Summarize the hooks I added and any code modifications.
-```
-
-Kiro reads the current git diff and gives you a summary. This is a natural "pause and review" moment — useful anytime you want to see the big picture before committing.
-
-Other context providers worth trying here:
-
-- `#codebase` — "How is the hook system set up?" (Kiro finds the relevant files automatically)
-- `#file .kiro/hooks/build-on-save.json` — Reference a specific hook file in your question
+- O evento `postTaskExecution` conecta-se diretamente ao ciclo de desenvolvimento de Specs do Passo 2.
+- A cada tarefa finalizada no checklist, o build é executado de forma automática.
+- Se uma tarefa causar regressão, você é notificado imediatamente — sem esperar acumular erros nas tarefas seguintes.
+- Essencial para execuções sequenciais no modo Autopilot.
 
 ---
 
-## 5.8 — Managing Hooks
+## 5.7 — Inspecione as Alterações: `#git diff`
 
-### Viewing hooks
+Depois de configurar hooks e modificar o código, pause e inspecione tudo o que foi alterado utilizando o provedor de contexto `#git diff`.
 
-All hooks appear in the **Agent Hooks** section of the Kiro panel. Each shows:
+No chat, envie:
 
-- Name and description
-- Trigger type
-- Whether it's enabled or disabled
+```text
+#git diff O que foi alterado neste passo? Faça um resumo dos hooks que adicionei e das modificações feitas no código.
+```
 
-### Enabling / disabling
+O Kiro consulta o diff atual do Git e retorna um resumo estruturado. Esse é um excelente ponto de parada para revisar o escopo antes de realizar commits.
 
-Click the toggle next to any hook to enable or disable it without deleting it. Useful when a hook is noisy during exploratory work but valuable during focused development.
+Outros provedores úteis para testar aqui:
 
-### Hook files on disk
+- `#codebase` — "Como está estruturado o sistema de hooks?" (o Kiro localiza os arquivos relevantes sozinho)
+- `#file .kiro/hooks/build-on-save.json` — Permite referenciar um hook específico na sua pergunta
 
-Hooks live in `.kiro/hooks/` as JSON files:
+---
+
+## 5.8 — Gerenciamento de Hooks
+
+### Visualizando os Hooks
+
+Todos os hooks configurados são listados na aba **Agent Hooks** no painel lateral, exibindo:
+
+- Nome e descrição
+- Tipo de gatilho
+- Status (ativo ou inativo)
+
+### Ativando e Desativando
+
+Utilize a chave seletora ao lado de qualquer hook para ativá-lo ou desativá-lo temporariamente sem precisar apagar o arquivo. Útil quando um hook se torna verboso em explorações livres, mas essencial em entregas formais.
+
+### Arquivos no Disco
+
+Os hooks são armazenados como arquivos JSON em `.kiro/hooks/`:
 
 ```
 .kiro/hooks/
@@ -243,49 +243,49 @@ Hooks live in `.kiro/hooks/` as JSON files:
 └── post-task-build-check.json
 ```
 
-They're version-controllable — commit them to your repo and the whole team gets the same automation.
+Como são arquivos texto, podem ser versionados no Git — compartilhando as mesmas automações com toda a equipe do projeto.
 
 ---
 
-## 5.9 — Hook Patterns Worth Knowing
+## 5.9 — Padrões Recomendados de Hooks
 
-Beyond what you built, here are patterns you may want to try:
+Além dos exemplos criados, aqui estão padrões comuns para o dia a dia:
 
-| Pattern                | Event                      | Action                                                     | Use case             |
-| ---------------------- | -------------------------- | ---------------------------------------------------------- | -------------------- |
-| Format on save         | `fileEdited` + `*.ts`      | `runCommand`: `npx prettier --write {file}`                | Auto-format code     |
-| Commit message review  | `preToolUse` + `shell`     | `askAgent`: "Review this git commit for sensitive data"    | Prevent secret leaks |
-| Test after changes     | `fileEdited` + `*.test.ts` | `runCommand`: `npm test`                                   | Run tests on save    |
-| Documentation reminder | `postToolUse` + `write`    | `askAgent`: "Check if this change needs a README update"   | Keep docs current    |
-| Manual deploy check    | `userTriggered`            | `askAgent`: "Review the codebase for deployment readiness" | On-demand audit      |
-
----
-
-## 5.10 — Recap
-
-| Kiro Feature                  | How you used it                                             |
-| ----------------------------- | ----------------------------------------------------------- |
-| **Agent Hooks**               | Created three hooks with different trigger types            |
-| **fileEdited trigger**        | Build on save for TypeScript files                          |
-| **preToolUse trigger**        | Accessibility review before file writes                     |
-| **postTaskExecution trigger** | Build verification after spec tasks                         |
-| **runCommand action**         | Executed shell commands automatically                       |
-| **askAgent action**           | Had Kiro review its own work before writing                 |
-| **Natural language creation** | Described hooks in plain English, Kiro generated the config |
-| **Hook management**           | Showed enable/disable and file structure                    |
-| **`#git diff` context**       | Reviewed all changes made during the step                   |
-| **Context providers**         | Used `#codebase` and `#file` to reference project files     |
+| Padrão | Evento | Ação | Caso de Uso |
+| :--- | :--- | :--- | :--- |
+| Formatação ao Salvar | `fileEdited` + `*.ts` | `runCommand`: `npx prettier --write {file}` | Formatação automática de código |
+| Revisão de Mensagem de Commit | `preToolUse` + `shell` | `askAgent`: "Revise este commit para dados sensíveis" | Evitar vazamento de credenciais e chaves |
+| Testes pós-alteração | `fileEdited` + `*.test.ts` | `runCommand`: `npm test` | Executar testes unitários ao salvar |
+| Lembrete de Documentação | `postToolUse` + `write` | `askAgent`: "Verifique se esta mudança requer atualizar o README" | Manter a documentação alinhada |
+| Verificação de Deploy Manual | `userTriggered` | `askAgent`: "Audite a base de código quanto à prontidão para deploy" | Auditoria sob demanda |
 
 ---
 
-## Key Takeaway
+## 5.10 — Recapitulação
 
-Steering tells Kiro what the rules are. Hooks enforce them automatically. Together, they create a development environment where conventions aren't just documented — they're actively maintained every time you save a file, write code, or complete a task.
-
-The best hooks are the ones you forget about. They just work in the background, catching issues before they become problems.
+| Recurso do Kiro | Como você utilizou |
+| :--- | :--- |
+| **Agent Hooks** | Criou três hooks utilizando diferentes tipos de disparadores |
+| **Gatilho `fileEdited`** | Compilação automática ao salvar arquivos TypeScript |
+| **Gatilho `preToolUse`** | Auditoria preventiva de acessibilidade antes da escrita em disco |
+| **Gatilho `postTaskExecution`** | Validação de compilação após cada tarefa de spec concluída |
+| **Ação `runCommand`** | Execução automática de comandos no terminal |
+| **Ação `askAgent`** | Instruiu o Kiro a auditar a própria entrega antes de salvar |
+| **Criação em Linguagem Natural** | Descreveu a regra em linguagem comum e o Kiro gerou a configuração JSON |
+| **Gerenciamento de Hooks** | Aprendeu a ativar, pausar e organizar arquivos na pasta `.kiro/hooks/` |
+| **Contexto `#git diff`** | Revisou todas as modificações realizadas na etapa |
+| **Provedores de Contexto** | Usou `#codebase` e `#file` para referenciar itens da aplicação |
 
 ---
 
-## What's Next
+## Ponto Principal
 
-You've got conventions (Steering) and automation (Hooks). In the next step, you'll extend Kiro's capabilities with **Powers** — installing curated tool bundles that give Kiro access to external services and specialized knowledge.
+O Steering ensina as regras ao Kiro. Os Hooks garantem que elas sejam cumpridas de forma contínua. Juntos, formam um ambiente onde as convenções não são apenas teoria, mas sim verificadas a cada salvamento, escrita ou tarefa finalizada.
+
+Os melhores hooks são aqueles transparentes: operam em segundo plano e previnem falhas antes que elas se tornem problemas maiores.
+
+---
+
+## Próximos Passos
+
+Agora você já conta com convenções (Steering) e automação (Hooks). No próximo passo, você estenderá as capacidades do Kiro com **Powers** — pacotes integrados que conectam o agente a serviços de nuvem e ferramentas externas.
