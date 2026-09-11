@@ -1,103 +1,103 @@
-# Step 3 — Adding Skills
+# Passo 3 — Adicionando Skills
 
-> **Goal:** Install community skills to level up Kiro's output, Anthropic's frontend-design skill for stunning UI and Vercel's React best practices for production-quality code. Then use them to redesign the tic-tac-toe game.
-
----
-
-## 3.1 — What Are Skills?
-
-Skills are portable instruction packages that follow the open [Agent Skills](https://agentskills.io/) standard. They give Kiro specialized knowledge it doesn't have out of the box — design principles, framework best practices, deployment workflows, you name it.
-
-The key idea is **progressive disclosure**:
-
-1. **Discovery** — At startup, Kiro loads only the name and description of each installed skill (lightweight).
-2. **Activation** — When your request matches a skill's description, Kiro loads the full instructions into context.
-3. **Execution** — Kiro follows the instructions, pulling in scripts or reference files only as needed.
-
-This means you can have dozens of skills installed without bloating every conversation. Kiro only loads what's relevant.
-
-### Where skills live
-
-| Scope         | Location          | Use case                               |
-| ------------- | ----------------- | -------------------------------------- |
-| **Workspace** | `.kiro/skills/`   | Project-specific workflows             |
-| **Global**    | `~/.kiro/skills/` | Personal workflows across all projects |
-
-### How to use them
-
-Skills activate automatically when your request matches their description. You can also mention the skill's domain explicitly in your prompt to ensure it activates (e.g., "follow React best practices" or "use the frontend design skill").
+> **Objetivo:** Instalar skills da comunidade para elevar o nível das entregas do Kiro: a skill de design de frontend da Anthropic para uma interface elegante e a de boas práticas em React da Vercel para código em nível de produção. Em seguida, utilizá-las para redesenhar o jogo da velha.
 
 ---
 
-## 3.2 — The Two Skills You're Installing
+## 3.1 — O que são Skills?
 
-### 1. Anthropic's Frontend Design Skill
+Skills são pacotes portáteis de instruções que seguem o padrão aberto [Agent Skills](https://agentskills.io/). Elas agregam ao Kiro conhecimentos especializados que não vêm de fábrica — diretrizes avançadas de design, boas práticas de frameworks, rotinas de deploy, entre outros.
 
-**What it does:** Guides Kiro to create distinctive, production-grade frontend interfaces that avoid generic "AI slop" aesthetics. It pushes for bold design choices — unique typography, cohesive color themes, animations, spatial composition, and textural details.
+O conceito central é a **revelação progressiva** (*progressive disclosure*):
 
-**Why you want it:** Your tic-tac-toe game probably looks... fine. Generic. This skill will make Kiro think like a designer before writing CSS — choosing an aesthetic direction, picking distinctive fonts, adding motion and atmosphere.
+1. **Descoberta (*Discovery*)** — Ao inicializar, o Kiro carrega apenas o nome e a descrição de cada skill instalada (operação leve).
+2. **Ativação (*Activation*)** — Quando o seu pedido coincide com a descrição de uma skill, o Kiro carrega o conjunto completo de instruções no contexto.
+3. **Execução (*Execution*)** — O Kiro segue as diretrizes, invocando scripts ou arquivos de referência apenas quando necessário.
 
-**Key principles it teaches Kiro:**
+Graças a esse modelo, você pode ter dezenas de skills instaladas sem estourar o limite de contexto de cada conversa. O Kiro carrega apenas o que é estritamente relevante para aquela requisição.
 
-- Think about purpose, tone, and differentiation before coding
-- Choose bold typography (no Inter, no Roboto, no Arial)
-- Commit to a cohesive color theme with dominant colors and sharp accents
-- Add motion — page load animations, hover states, micro-interactions
-- Create atmosphere with textures, gradients, shadows, and depth
-- Never produce cookie-cutter, predictable layouts
+### Onde as skills ficam armazenadas
 
-### 2. Vercel's React Best Practices Skill
+| Escopo | Localização | Cenário de uso |
+| :--- | :--- | :--- |
+| **Workspace** | `.kiro/skills/` | Fluxos específicos para este projeto |
+| **Global** | `~/.kiro/skills/` | Padrões de trabalho compartilhados entre todos os seus projetos |
 
-**What it does:** A comprehensive performance optimization guide with 70 rules across 8 categories, maintained by Vercel Engineering. Covers everything from eliminating waterfalls to bundle size optimization to re-render prevention.
+### Como utilizá-las
 
-**Why you want it:** Your tic-tac-toe game is small, but the patterns matter. This skill ensures Kiro writes React code the way Vercel's engineers would — proper component structure, efficient state management, no unnecessary re-renders.
-
-**Key categories (by priority):**
-
-| Priority | Category                | Examples                                                               |
-| -------- | ----------------------- | ---------------------------------------------------------------------- |
-| CRITICAL | Eliminating Waterfalls  | `Promise.all()` for independent ops, defer await into branches         |
-| CRITICAL | Bundle Size             | Direct imports (no barrel files), dynamic imports for heavy components |
-| HIGH     | Server-Side Performance | `React.cache()` for dedup, minimize client serialization               |
-| MEDIUM   | Re-render Optimization  | Functional `setState`, derived state during render, split hooks        |
-| MEDIUM   | Rendering Performance   | Content-visibility for lists, hoist static JSX, ternary over `&&`      |
+As skills são ativadas **automaticamente** assim que o seu prompt demanda aquele tipo de conhecimento. Você também pode explicitar o domínio da skill no seu texto (por exemplo: "siga as boas práticas de React" ou "use a skill de frontend design").
 
 ---
 
-## 3.3 — Installing the Skills
+## 3.2 — As Duas Skills que Você Vai Instalar
 
-### Frontend Design (from skills.sh)
+### 1. Skill de Design de Frontend da Anthropic
 
-Open your terminal and run:
+**O que faz:** Orienta o Kiro a criar interfaces modernas e com acabamento de produção, evitando layouts genéricos e com cara de template automatizado. Estimula decisões sólidas de design — tipografia de impacto, esquemas de cores coesos, animações, composição espacial e cuidado com texturas.
+
+**Por que você deve usar:** O jogo da velha atual provavelmente tem um visual comum. Esta skill força o Kiro a pensar como um designer de produto antes de sair escrevendo CSS — definindo uma identidade visual, escolhendo fontes adequadas e criando atmosfera.
+
+**Diretrizes que ela ensina ao Kiro:**
+
+- Refletir sobre propósito, tom e diferenciação da interface antes de programar
+- Escolher tipografias autênticas (nada de padrões saturados como Inter, Roboto ou Arial)
+- Definir uma paleta consistente com cores dominantes e contrastes bem marcados
+- Inserir dinamismo — animações de carregamento, estados de hover e microinterações
+- Criar profundidade através de texturas, gradientes e sombras
+- Evitar designs padronizados e previsíveis
+
+### 2. Skill de Boas Práticas em React da Vercel
+
+**O que faz:** Um guia aprofundado de otimização de performance contendo 70 regras divididas em 8 categorias, mantido pela equipe de engenharia da Vercel. Aborda desde a eliminação de cascatas de requisições (*waterfalls*) até a redução do tamanho de bundle e controle de re-renderizações.
+
+**Por que você deve usar:** O jogo da velha é simples, mas os padrões importam. Esta skill garante que o Kiro estruture os componentes como os engenheiros da Vercel recomendam — componentes desacoplados, gestão de estado limpa e ciclo de vida otimizado.
+
+**Categorias fundamentais (por ordem de prioridade):**
+
+| Prioridade | Categoria | Exemplos Práticos |
+| :--- | :--- | :--- |
+| CRÍTICA | Eliminação de Cascatas (*Waterfalls*) | `Promise.all()` para operações paralelas, adiar `await` para blocos específicos |
+| CRÍTICA | Otimização de Pacotes (*Bundle Size*) | Importações diretas (evitar *barrel files*), importações dinâmicas para componentes pesados |
+| ALTA | Performance no Servidor (*Server-Side*) | `React.cache()` para deduplicação, minimizar dados serializados enviados ao cliente |
+| MÉDIA | Prevenção de Re-renderizações | `setState` funcional, cálculo de estado derivado durante a renderização, desacoplamento de hooks |
+| MÉDIA | Performance de Renderização | `content-visibility` em listas, elevação de JSX estático, uso de ternários em vez de `&&` |
+
+---
+
+## 3.3 — Instalando as Skills
+
+### Design de Frontend (via skills.sh)
+
+Abra o terminal e execute:
 
 ```bash
-npx skills add https://github.com/anthropics/skills --skill frontend-design
+npx skills add [https://github.com/anthropics/skills](https://github.com/anthropics/skills) --skill frontend-design
 ```
 
-Select to install the additional Agent for **Kiro**.
+Ao ser solicitado, selecione o agente do **Kiro**.
 
-This downloads the skill from Anthropic's GitHub repo and installs it into your `.kiro/skills/` directory.
+Esse comando baixa a skill do repositório da Anthropic no GitHub e instala os arquivos dentro da pasta `.kiro/skills/`.
 
-### React Best Practices (from Vercel)
+### Boas Práticas em React (da Vercel)
+
+Execute no terminal:
 
 ```bash
-npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices
+npx skills add [https://github.com/vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) --skill vercel-react-best-practices
 ```
 
-This installs Vercel's React optimization skill the same way.
+### Alternativa: Importação visual pelo painel do Kiro
 
-### Alternative: Import via Kiro panel
+Você também pode instalar diretamente pela interface gráfica:
 
-You can also install skills through the UI:
+1. Abra a seção **Agent Steering & Skills** no painel do Kiro.
+2. Clique no ícone `+` e selecione **Import a skill**.
+3. Escolha a opção **GitHub** e cole a URL do repositório.
+4. Selecione a skill desejada para importação.
 
-1. Open the **Agent Steering & Skills** section in the Kiro panel
-2. Click `+` and select **Import a skill**
-3. Choose **GitHub** and paste the repository URL
-4. Select the skill you want to import
+### Verificando a instalação
 
-### Verify installation
-
-After installing, you should see both skills in the **Agent Steering & Skills** section of the Kiro panel. You can also check the filesystem:
+Após o procedimento, ambas as skills deverão aparecer listadas na barra lateral. Você também pode conferir diretamente na árvore de arquivos:
 
 ```
 .kiro/skills/
@@ -109,101 +109,103 @@ After installing, you should see both skills in the **Agent Steering & Skills** 
     └── rules/
         ├── async-parallel.md
         ├── bundle-barrel-imports.md
-        └── ... (70 rule files)
+        └── ... (70 arquivos de regras)
 ```
 
 ---
 
-## 3.4 — Using the Skills: Redesign the Game
+## 3.4 — Usando as Skills: Redesenhe o Jogo
 
-Now put these skills to work. Open a Vibe chat and try:
+Agora coloque essas instruções para funcionar. Abra uma sessão no modo Vibe e envie:
 
-```
-Redesign the tic-tac-toe game UI. Make it visually stunning —
-I want it to feel like a premium, polished experience, not a generic tutorial app. Use the installed Skills.
-Keep all the existing game logic and backend integration intact.
-```
-
-### What to watch for
-
-With the **frontend-design** skill active, Kiro will:
-
-- Start with a **design thinking** phase — choosing an aesthetic direction before writing code
-- Pick distinctive fonts (not Inter or Roboto)
-- Create a bold color palette with CSS variables
-- Add animations — board entrance, piece placement, win celebration
-- Build atmosphere with textures, shadows, or gradients
-- Make the layout feel intentional, not default
-
-With the **react-best-practices** skill active, Kiro will:
-
-- Structure components to avoid unnecessary re-renders
-- Use proper state patterns (functional setState, derived state)
-- Keep the component tree clean (no inline component definitions)
-- Use ternary operators for conditional rendering instead of `&&`
-
-### Compare the difference
-
-If you saved a screenshot of the game before installing skills, compare it side-by-side with the redesigned version. The contrast should be dramatic — from "tutorial project" to "something you'd actually want to play."
-
-### Web Tools in Action
-
-During the redesign, Kiro might need to look things up — a Google Font that matches the aesthetic, a CSS animation technique, or a color palette tool. Kiro has built-in **web tools** that let it search the internet and fetch content from URLs in real time.
-
-Try asking:
-
-```
-Find a distinctive Google Font pairing that fits a retro-futuristic aesthetic for the game.
+```text
+Redesenhe a interface do jogo da velha. Crie uma experiência visual incrível —
+quero que a aplicação pareça um produto premium e moderno, não um projeto simples de tutorial.
+Utilize as Skills instaladas.
+Mantenha intactas todas as regras de jogo e as integrações existentes com o backend.
 ```
 
-Kiro will search the web, find font options, and apply them. This is useful anytime Kiro needs current information — library docs, API references, design inspiration — that goes beyond its training data.
+### O que observar
+
+Com a skill **frontend-design** ativa, o Kiro irá:
+
+- Iniciar por uma etapa de planejamento estético — alinhando conceito e estilo antes de gerar CSS
+- Selecionar fontes tipográficas expressivas
+- Definir uma paleta de cores harmoniosa através de variáveis CSS
+- Aplicar transições — animação de abertura, colocação dos marcadores e efeito visual de vitória
+- Adicionar profundidade com sombras suaves, gradientes e texturas
+- Entregar um layout intencional e fluido
+
+Com a skill **react-best-practices** ativa, o Kiro irá:
+
+- Organizar a estrutura para evitar re-renderizações desnecessárias
+- Adotar padrões recomendados de estado (`setState` funcional e estados calculados dinamicamente)
+- Manter a hierarquia de componentes legível (sem criar componentes inline dentro de outros componentes)
+- Empregar operadores ternários para renderização condicional em vez de sintaxes propensas a falhas como `&&`
+
+### Compare os resultados
+
+Se você tiver guardado um print de como o jogo estava antes, compare-o com a nova interface. A diferença é evidente: de uma demonstração básica de curso para uma aplicação com nível de acabamento profissional.
+
+### Ferramentas Web em Ação (*Web Tools*)
+
+Durante o redesign, o Kiro pode precisar consultar dados externos — buscar uma família tipográfica no Google Fonts, verificar técnicas de animação CSS ou buscar referências de paleta. Para isso, ele conta com **ferramentas web nativas** para realizar buscas na internet e extrair conteúdos de páginas em tempo real.
+
+Faça um teste pedindo:
+
+```text
+Encontre uma combinação de fontes do Google Fonts com identidade retrofuturista para o jogo.
+```
+
+O Kiro realiza a busca na web, avalia as alternativas e aplica os estilos importados. Essa capacidade é útil sempre que você precisar de dados atualizados que vão além da base de treino do modelo.
 
 ---
 
-## 3.5 — How Skills Activate
+## 3.5 — Como as Skills são Ativadas
 
-Skills activate **automatically** based on relevance. When your prompt matches a skill's description (defined in its `SKILL.md` frontmatter), Kiro loads the full instructions into context for that conversation.
+A ativação das skills é **automática** por relevância semântica. Quando a descrição de uma skill (configurada no frontmatter do seu `SKILL.md`) corresponde ao objetivo do seu prompt, o Kiro carrega essas instruções para o contexto daquela conversa.
 
-For example:
-- Asking to "redesign the UI" or "make it visually stunning" triggers the **frontend-design** skill because its description mentions "frontend interfaces," "styling," and "beautifying."
-- Writing or refactoring React components triggers **vercel-react-best-practices** because its description mentions "React components," "performance improvements," and "refactoring."
+Exemplos práticos:
 
-You don't need to do anything special — just describe what you want, and the relevant skills activate. If you want to be explicit, mention the skill's domain in your prompt (e.g., "follow React best practices" or "use the frontend design skill").
+- Pedir para "redesenhar a interface" ou "melhorar o visual" aciona a skill **frontend-design**, pois suas especificações cobrem estilização, interfaces e acabamento visual.
+- Escrever ou refatorar componentes aciona a skill **vercel-react-best-practices**, cujas diretrizes cobrem padrões de componentes, performance e refatoração em React.
 
----
-
-## 3.6 — Other Ways to Give Kiro Context
-
-Skills are one of several ways to feed Kiro extra knowledge. You'll cover the others in later steps:
-
-- **Skills**: Community instruction packages (what you just installed). Activate automatically based on your request.
-- **Steering**: Project-specific conventions you write yourself. Things like "our API always returns this shape" or "use functional components only." Lives in `.kiro/steering/`. Covered in **Step 4**.
-- **Powers**: External service integrations (deployment, databases, observability) bundled with MCP tools and best-practice guidance. Covered in **Step 6**.
-
-Beyond these, you can also pull context into any chat manually:
-
-- Type `#` in the chat input to attach a specific **file**, **folder**, **terminal output**, **git diff**, or **problems** from your editor
-- Drag and drop **images** or **documents** (PDF, DOCX) directly into the chat
-- Reference `#Problems` to share current diagnostics with Kiro
-
-This means Kiro's knowledge comes from layers: automatic context (skills, steering), explicit context (what you attach with `#`), and external tools (powers). Together they keep conversations focused without you having to re-explain your project every time.
+Você não precisa de nenhum comando manual — basta descrever seu objetivo. Se quiser garantir a ativação, mencione o escopo explicitamente no prompt (ex.: "utilizando a skill de frontend design").
 
 ---
 
-## 3.7 — Recap
+## 3.6 — Outras Formas de Enriquecer o Contexto do Kiro
 
-| Kiro Feature                     | How you used it                                                         |
-| -------------------------------- | ----------------------------------------------------------------------- |
-| **Agent Skills**                 | Installed two community skills to enhance Kiro's capabilities           |
-| **skills.sh / npx skills**       | Used the CLI to install skills from GitHub repos                        |
-| **Progressive disclosure**       | Skills loaded automatically when your request matched their descriptions|
-| **Automatic activation**         | Skills activated based on prompt relevance, no manual invocation needed |
-| **Vibe mode**                    | Used conversational chat to redesign the game with skills active        |
-| **Web tools**                    | Kiro searched the web for fonts, colors, or techniques during redesign  |
-| **Skills vs Steering vs Powers** | Clarified the three knowledge systems                                   |
+As Skills representam apenas uma das formas de guiar o Kiro. As outras camadas incluem:
+
+- **Skills**: Manuais de boas práticas da comunidade (o que instalamos agora). São ativadas por demanda conforme o contexto da conversa.
+- **Steering**: Regras e convenções específicas do *seu* projeto criadas por você. Exemplos: "nossa API sempre devolve as respostas neste padrão" ou "utilize apenas componentes funcionais". Ficam em `.kiro/steering/` e serão vistas no **Passo 4**.
+- **Powers**: Integrações com serviços de nuvem e ferramentas externas (hospedagem, bancos de dados, telemetria) acompanhadas de servidores MCP e instruções de melhores práticas. Veremos no **Passo 6**.
+
+Além desses pilares, você pode alimentar o contexto de qualquer conversa pontualmente:
+
+- Digite `#` no chat para vincular um **arquivo**, **pasta**, **saída do terminal**, **git diff** ou a lista de **problemas (*problems*)** da IDE
+- Arraste e solte **imagens** ou **documentos** (PDF, DOCX) diretamente na caixa de entrada
+- Use `#Problems` para passar diagnósticos de compilação ou linter para resolução imediata
+
+O conhecimento do Kiro se constrói em camadas: diretrizes automáticas (skills, steering), dados explícitos apontados com `#` e ferramentas de integração (powers). Juntos, esses recursos mantêm a IA orientada sem exigir que você reexplique o projeto do zero a cada interação.
 
 ---
 
-## What's Next
+## 3.7 — Recapitulação
 
-Your game looks great and follows React best practices. In the next step, you'll set up **Steering** to teach Kiro about your specific project conventions — so every future change follows your patterns automatically.
+| Recurso do Kiro | Como você utilizou |
+| :--- | :--- |
+| **Agent Skills** | Instalou pacotes da comunidade para expandir a capacidade técnica do Kiro |
+| **skills.sh / npx skills** | Utilizou a linha de comando para instalar skills de repositórios do GitHub |
+| **Revelação progressiva** | As skills foram carregadas de modo inteligente quando a solicitação demandou |
+| **Ativação automática** | As instruções foram ativadas pela relevância do prompt sem comandos manuais |
+| **Modo Vibe com Skills** | Redesenhou a interface aproveitando as regras ativas de UI e performance |
+| **Ferramentas web** | O Kiro buscou fontes e estilos na internet durante o desenvolvimento |
+| **Skills vs Steering vs Powers** | Compreendeu os papéis de cada sistema de conhecimento do ecossistema |
+
+---
+
+## Próximos Passos
+
+Seu aplicativo agora conta com uma interface bonita e alinhada com as melhores práticas de desenvolvimento em React. No próximo passo, você configurará o **Steering** para ensinar ao Kiro as convenções exclusivas do seu projeto — para que qualquer implementação futura siga automaticamente os seus padrões técnicos.
