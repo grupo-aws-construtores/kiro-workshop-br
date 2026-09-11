@@ -58,7 +58,6 @@ Ao término do workshop, você terá:
     ├── 7_mcp_and_testing.md
     └── 8_kiro_cli.md
 
-
-
+```
 
 Arquivos e pastas gerados durante a execução do workshop (node_modules/, dist/, .vite/, .playwright-mcp/, etc.) já estão cobertos pelo .gitignore.
