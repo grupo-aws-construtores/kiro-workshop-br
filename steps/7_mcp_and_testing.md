@@ -1,53 +1,53 @@
-# Step 7 — MCP and Testing with Playwright
+# Passo 7 — MCP e Testes Automatizados com Playwright
 
-> **Goal:** Configure a raw MCP server manually, install the Playwright MCP, and use it to test your tic-tac-toe game by having Kiro play it in a real browser.
-
----
-
-## 7.1 — What Is MCP?
-
-You've already used MCP indirectly — Powers bundle MCP servers behind the scenes. But you can also configure MCP servers directly for tools that don't have a Power yet, or when you want full control.
-
-**Model Context Protocol (MCP)** is an open protocol that lets Kiro communicate with external servers to access specialized tools, prompts, and resources. Think of it as a plugin system: each MCP server provides a set of tools that Kiro can call during a conversation.
-
-With MCP, Kiro can:
-
-- Browse the web and interact with web pages
-- Query databases
-- Call external APIs
-- Access specialized knowledge bases
-- Run custom tools you build yourself
+> **Objetivo:** Configurar manualmente um servidor MCP puro, instalar a integração do Playwright MCP e utilizá-la para validar o jogo da velha fazendo com que o Kiro jogue a aplicação dentro de um navegador real.
 
 ---
 
-## 7.2 — Why Playwright MCP?
+## 7.1 — O que é o MCP?
 
-You've built a tic-tac-toe game. You've added a backend, redesigned the UI, set up conventions, and automated your workflow. But you haven't actually _tested_ it properly.
+Você já utilizou o MCP de forma indireta — as Powers utilizam servidores MCP internamente. Contudo, você também pode configurar servidores MCP diretamente para ferramentas que ainda não possuem uma Power pronta ou quando deseja controle total das definições.
 
-The **Playwright MCP server** gives Kiro the ability to control a real browser — navigate to pages, click elements, fill forms, take screenshots, and inspect the DOM. That means you can ask Kiro to:
+O **Model Context Protocol (MCP)** é um padrão aberto que viabiliza a comunicação entre o Kiro e servidores externos para acessar ferramentas especializadas, prompts e recursos de contexto. Pense nele como um sistema de plugins: cada servidor MCP expõe um conjunto de métodos que o Kiro pode invocar durante a conversa.
 
-- Open your game in a browser
-- Play a full game by clicking cells
-- Verify the win/draw detection works
-- Check the leaderboard shows correct stats
-- Take screenshots of the results
+Com o MCP, o Kiro pode:
 
-It's like having a QA engineer who can actually use the app, not just read the code.
+- Navegar na web e manipular páginas ativas
+- Consultar bancos de dados relacionais e analíticos
+- Consumir endpoints de APIs externas
+- Consultar bases de conhecimento corporativas
+- Executar scripts e ferramentas desenvolvidas por você
 
 ---
 
-## 7.3 — Configuring the Playwright MCP Server
+## 7.2 — Por que usar o Playwright MCP?
 
-MCP servers are configured in `mcp.json` files. There are two scopes:
+Você estruturou o jogo da velha, adicionou backend, redesenhou a interface, formalizou diretrizes e criou automações. Agora, precisamos testar a experiência do usuário de ponta a ponta.
 
-| Scope             | Location                    | Applies to        |
-| ----------------- | --------------------------- | ----------------- |
-| **Workspace**     | `.kiro/settings/mcp.json`   | This project only |
-| **User (global)** | `~/.kiro/settings/mcp.json` | All projects      |
+O **servidor Playwright MCP** permite que o Kiro controle um navegador web real — navegando por links, clicando em elementos, preenchendo formulários, capturando prints e inspecionando a árvore do DOM. Isso possibilita pedir para o Kiro:
 
-### Add the Playwright MCP server
+- Acessar a URL local da sua aplicação
+- Disputar uma partida completa clicando nas casas do tabuleiro
+- Confirmar se a verificação de vitória e empate está funcionando
+- Validar se os dados do leaderboard estão sendo atualizados corretamente
+- Capturar telas como evidência dos testes executados
 
-Create or edit `.kiro/settings/mcp.json`:
+É o equivalente a ter um engenheiro de QA interagindo com a sua aplicação em tempo real.
+
+---
+
+## 7.3 — Configurando o Servidor Playwright MCP
+
+Os servidores MCP são parametrizados em arquivos `mcp.json`. Existem dois níveis de configuração:
+
+| Escopo | Localização | Aplica-se a |
+| :--- | :--- | :--- |
+| **Workspace** | `.kiro/settings/mcp.json` | Apenas a este projeto |
+| **Usuário (Global)** | `~/.kiro/settings/mcp.json` | A todos os seus projetos |
+
+### Adicionando o Servidor do Playwright
+
+Crie ou edite o arquivo `.kiro/settings/mcp.json`:
 
 ```json
 {
@@ -62,202 +62,202 @@ Create or edit `.kiro/settings/mcp.json`:
 }
 ```
 
-That's it. Save the file and Kiro will automatically detect the new server and connect to it.
+Salve o arquivo. O Kiro identifica o novo servidor automaticamente e estabelece a conexão.
 
-### Verify the connection
+### Verificando o Status da Conexão
 
-1. Open the **MCP Servers** section in the Kiro panel
-2. You should see "playwright" with a green connection indicator
-3. Click the server name to see the available tools
+1. Abra a aba **MCP Servers** no painel lateral do Kiro.
+2. Localize a entrada "playwright" acompanhada de um indicador verde de conexão ativa.
+3. Clique sobre o nome do servidor para inspecionar os métodos disponíveis.
 
-### What tools does Playwright MCP provide?
+### Ferramentas Fornecidas pelo Playwright MCP
 
-The Playwright MCP server gives Kiro a rich set of browser automation tools:
+O servidor disponibiliza um catálogo completo para automação web:
 
-| Tool                       | What it does                                                                        |
-| -------------------------- | ----------------------------------------------------------------------------------- |
-| `browser_navigate`         | Go to a URL                                                                         |
-| `browser_snapshot`         | Capture an accessibility snapshot of the page (better than screenshots for actions) |
-| `browser_click`            | Click an element                                                                    |
-| `browser_type`             | Type text into an input                                                             |
-| `browser_take_screenshot`  | Take a visual screenshot                                                            |
-| `browser_evaluate`         | Run JavaScript on the page                                                          |
-| `browser_console_messages` | Read console output                                                                 |
-| `browser_network_requests` | Inspect network traffic                                                             |
-| `browser_hover`            | Hover over elements                                                                 |
-| `browser_select_option`    | Select dropdown options                                                             |
-| `browser_fill_form`        | Fill multiple form fields at once                                                   |
-| `browser_wait_for`         | Wait for text to appear or disappear                                                |
-
----
-
-## 7.4 — Testing the Game
-
-Make sure your dev server is running (`npm run dev`), then open a Vibe chat and try:
-
-### Test 1: Play a full game
-
-```
-Open the tic-tac-toe game at http://localhost:5173 in the browser.
-Play a full game — make moves for both X and O.
-Try to get X to win with a diagonal.
-Take a screenshot of the winning state.
-```
-
-### What to watch for
-
-Kiro will:
-
-1. Navigate to the game URL
-2. Take a snapshot to understand the page structure
-3. Click cells one by one, alternating X and O
-4. Watch for the win message to appear
-5. Take a screenshot showing the final board state
-
-This is a great visual moment — you can see Kiro literally playing the game in a real browser.
-
-### Test 2: Verify the leaderboard
-
-```
-After the game, navigate to the leaderboard page.
-Verify that the win was recorded correctly.
-Take a screenshot of the leaderboard.
-```
-
-### Test 3: Test edge cases
-
-```
-Play a game that ends in a draw — fill all cells without either player winning.
-Verify the draw message appears.
-Then click the reset button and confirm the board clears.
-```
-
-### Test 4: Check accessibility
-
-```
-Take a snapshot of the game page and check if all interactive elements
-have proper accessibility labels. Report any issues.
-```
-
-The `browser_snapshot` tool captures an accessibility tree, not just a visual screenshot. Kiro can analyze it for missing labels, non-semantic elements, and keyboard navigation gaps.
+| Ferramenta | Descrição |
+| :--- | :--- |
+| `browser_navigate` | Direciona o navegador para uma URL específica |
+| `browser_snapshot` | Captura a árvore de acessibilidade da tela (mais precisa que prints para interações) |
+| `browser_click` | Executa o clique em um elemento da página |
+| `browser_type` | Insere texto em campos de formulário |
+| `browser_take_screenshot` | Realiza a captura visual da tela (print) |
+| `browser_evaluate` | Executa código JavaScript no contexto da página |
+| `browser_console_messages` | Realiza a leitura de logs e erros do console |
+| `browser_network_requests` | Analisa as requisições de rede trafegadas |
+| `browser_hover` | Simula a passagem do cursor do mouse sobre elementos |
+| `browser_select_option` | Seleciona opções em caixas de seleção (*dropdowns*) |
+| `browser_fill_form` | Preenche múltiplos inputs de formulário simultaneamente |
+| `browser_wait_for` | Aguarda a exibição ou desaparecimento de elementos ou textos na tela |
 
 ---
 
-## 7.5 — Bugfix Specs: When Testing Finds a Bug
+## 7.4 — Testando a Aplicação na Prática
 
-If one of the Playwright tests reveals a bug , say the leaderboard shows the wrong win count, or diagonal wins aren't detected. This is the perfect moment to try **Bugfix Specs**.
+Certifique-se de que o servidor local esteja ativo (`npm run dev`), abra uma conversa no modo Vibe e teste as instruções abaixo:
 
-In Step 2 you used Feature Specs. Bugfix Specs are the other type, designed for systematically diagnosing and fixing bugs.
+### Teste 1: Jogar uma Partida Completa
 
-### How to create a Bugfix Spec
-
-1. Open a **Spec** session (switch from Vibe in the session picker)
-2. Choose **Bug** instead of Feature
-3. Describe the bug:
-
-```
-The leaderboard shows incorrect win counts. When X wins a game,
-the leaderboard sometimes credits the win to O instead.
-I found this by playing the game with Playwright and checking the leaderboard.
+```text
+Abra o jogo da velha em http://localhost:5173 no navegador.
+Jogue uma partida completa — intercalando movimentos entre X e O.
+Faça o jogador X vencer fechando uma diagonal.
+Tire uma captura de tela (screenshot) da tela de vitória.
 ```
 
-### What Kiro generates
+### O que observar
 
-Instead of `requirements.md`, you get `bugfix.md` with:
+O Kiro irá:
 
-- **Current behavior**: What's happening now (wrong player credited)
-- **Expected behavior**: What should happen (correct player gets the win)
-- **Unchanged behavior**: What should NOT change (draw detection, game history, reset)
+1. Abrir a aplicação pelo endereço informado
+2. Executar um snapshot para mapear os elementos da interface
+3. Clicar nas posições do tabuleiro, alternando as marcações
+4. Identificar a mensagem indicando a vitória de X
+5. Capturar o print demonstrando o estado final do tabuleiro
 
-Then the same `design.md` → `tasks.md` flow as Feature Specs, but focused on the fix.
+Você poderá visualizar o Kiro operando o navegador de forma autônoma.
 
-### Why this matters
+### Teste 2: Validar a Atualização do Leaderboard
 
-Bugfix Specs prevent the classic "fix one thing, break another" problem. By explicitly defining what should _not_ change, Kiro is less likely to introduce regressions. The testing → bug discovery → bugfix spec → fix → re-test cycle is a complete quality loop.
+```text
+Após finalizar a partida, navegue até a tela de leaderboard.
+Confirme se a vitória foi computada corretamente para o jogador X.
+Capture um screenshot da tabela de classificação.
+```
+
+### Teste 3: Checagem de Casos de Borda (Empate)
+
+```text
+Jogue uma partida que termine em empate — preencha todas as casas sem que haja um vencedor.
+Verifique se a mensagem de empate é apresentada.
+Em seguida, clique no botão de reiniciar e confirme se o grid foi limpo.
+```
+
+### Teste 4: Auditoria de Acessibilidade em Tempo de Execução
+
+```text
+Faça um snapshot da página do jogo e avalie se todos os elementos interativos
+possuem rótulos de acessibilidade adequados. Gere um relatório com os apontamentos.
+```
+
+O método `browser_snapshot` inspeciona a árvore de acessibilidade do navegador, permitindo ao Kiro identificar ausência de labels, elementos não-semânticos e lacunas de navegação por teclado.
 
 ---
 
-## 7.6 — MCP Configuration Deep Dive
+## 7.5 — Bugfix Specs: Quando os Testes Encontram Falhas
 
-### The mcp.json structure
+Se durante a execução com Playwright o Kiro apontar uma inconsistência — como pontuação incorreta no placar ou falha na detecção de vitórias diagonais —, utilize uma **Bugfix Spec**.
+
+No Passo 2 exploramos as Feature Specs. As Bugfix Specs são voltadas exclusivamente para diagnóstico e correção controlada de bugs.
+
+### Como criar uma Bugfix Spec
+
+1. Inicie uma nova sessão escolhendo o tipo **Spec** no chat.
+2. Selecione a opção **Bug** (em vez de Feature).
+3. Descreva a falha encontrada:
+
+```text
+O placar de líderes está computando vitórias de forma errada. Quando o jogador X ganha uma partida,
+o sistema por vezes atribui a vitória ao jogador O.
+Identifiquei este comportamento ao simular as partidas pelo Playwright e inspecionar o leaderboard.
+```
+
+### O que o Kiro gera
+
+Em vez do arquivo `requirements.md`, o Kiro gera o documento `bugfix.md` estruturado em:
+
+- **Comportamento Atual (*Current behavior*)**: O erro identificado no sistema
+- **Comportamento Esperado (*Expected behavior*)**: O comportamento corrigido
+- **Comportamento Inalterado (*Unchanged behavior*)**: O que **não** deve sofrer alterações (checagem de empate, histórico e reset)
+
+A partir daí, segue-se o mesmo fluxo `design.md` → `tasks.md`, direcionado à correção da falha.
+
+### Por que isso é importante?
+
+As Bugfix Specs evitam o problema comum de corrigir uma parte do sistema e quebrar outra. Ao explicitar o que precisa ser mantido intacto, evitam-se regressões no código. O fluxo de testar → encontrar a falha → criar a spec de correção → aplicar o fix → retestar consolida o ciclo de qualidade.
+
+---
+
+## 7.6 — Detalhes da Configuração de Servidores MCP
+
+### Estrutura do arquivo mcp.json
 
 ```json
 {
   "mcpServers": {
-    "<server-name>": {
+    "<nome-do-servidor>": {
       "command": "npx",
-      "args": ["<package-name>@latest"],
+      "args": ["<pacote>@latest"],
       "env": {
-        "API_KEY": "your-key-here"
+        "CHAVE_API": "sua-chave-aqui"
       },
       "disabled": false,
-      "autoApprove": ["tool_name_1", "tool_name_2"]
+      "autoApprove": ["ferramenta_1", "ferramenta_2"]
     }
   }
 }
 ```
 
-| Field         | What it does                                           |
-| ------------- | ------------------------------------------------------ |
-| `command`     | The executable to run (e.g., `npx`, `uvx`, `node`)     |
-| `args`        | Arguments passed to the command                        |
-| `env`         | Environment variables for the server process           |
-| `disabled`    | Toggle the server on/off without removing the config   |
-| `autoApprove` | Tools that don't need user confirmation before running |
+| Campo | Finalidade |
+| :--- | :--- |
+| `command` | Executável a ser chamado (ex.: `npx`, `uvx`, `node`) |
+| `args` | Argumentos repassados para a execução do comando |
+| `env` | Variáveis de ambiente injetadas no processo do servidor |
+| `disabled` | Ativa ou desativa o servidor sem apagar a configuração |
+| `autoApprove` | Lista de ferramentas que podem rodar sem confirmação manual |
 
-### Scope precedence
+### Precedência de Escopos
 
-If the same server is defined in both workspace and global configs, the workspace config wins. This lets you set global defaults and override per-project.
+Quando o mesmo servidor for definido nas configurações do workspace e nas configurações globais do usuário, a definição do workspace prevalece.
 
-### Using `#mcp` in chat
+### Utilizando `#mcp` no Chat
 
-You can reference MCP tools, prompts, and resources in chat using the `#mcp` context provider:
+Você pode invocar métodos e recursos de servidores MCP diretamente nas mensagens utilizando `#mcp`:
 
+```text
+#mcp:playwright capture um screenshot da página aberta no navegador
 ```
-#mcp:playwright take a screenshot of the current page
-```
 
 ---
 
-## 7.7 — MCP vs Powers
+## 7.7 — Comparativo: MCP Manual vs Powers
 
-Now that you've configured a raw MCP server, the difference with Powers is clear:
+Com a experiência de configurar um servidor manual, a distinção entre as abordagens fica nítida:
 
-|                    | Raw MCP                             | Powers                                     |
-| ------------------ | ----------------------------------- | ------------------------------------------ |
-| **Setup**          | Manual JSON config                  | One-click install                          |
-| **Tools**          | Always loaded                       | Loaded dynamically by keyword              |
-| **Best practices** | Not included                        | Bundled in POWER.md                        |
-| **Hooks/steering** | Not included                        | Can be bundled                             |
-| **Best for**       | Custom tools, tools without a Power | Service integrations with curated guidance |
+| | MCP Manual | Powers |
+| :--- | :--- | :--- |
+| **Configuração** | Definição manual de arquivo JSON | Instalação com um clique |
+| **Carregamento de Ferramentas** | Fixo e contínuo no contexto | Dinâmico baseado em palavras-chave |
+| **Boas Práticas** | Não acompanham o pacote | Embutidas no arquivo `POWER.md` |
+| **Hooks e Automações** | Não inclusos | Podem vir empacotados |
+| **Melhor Aplicação** | Ferramentas customizadas ou sem Power pronta | Serviços de nuvem com rotinas homologadas |
 
-Use raw MCP when you need a specific tool (like Playwright) that doesn't have a Power. Use Powers when one exists — you get the tools plus the expertise.
-
----
-
-## 7.8 — Recap
-
-| Kiro Feature               | How you used it                                          |
-| -------------------------- | -------------------------------------------------------- |
-| **MCP configuration**      | Manually configured Playwright MCP in `mcp.json`         |
-| **MCP tools**              | Used browser automation tools to test the game           |
-| **Browser testing**        | Played the game, verified leaderboard, tested edge cases |
-| **Accessibility snapshot** | Used `browser_snapshot` to check a11y                    |
-| **Screenshots**            | Captured visual evidence of test results                 |
-| **`#mcp` context**         | Referenced MCP tools in chat                             |
-| **Bugfix Specs**           | Created a bugfix spec when testing revealed a bug        |
-| **MCP vs Powers**          | Clarified when to use each approach                      |
+Utilize servidores MCP puros quando precisar de ferramentas específicas (como o Playwright). Adote Powers sempre que houver integração pronta para o serviço desejado.
 
 ---
 
-## Key Takeaway
+## 7.8 — Recapitulação
 
-MCP is the raw protocol that connects Kiro to external tools. Powers are curated bundles built on top of MCP. For testing, the Playwright MCP server turns Kiro into a QA engineer who can actually use your app — clicking buttons, filling forms, and verifying behavior in a real browser.
-
-The configuration is a single JSON file. The payoff is being able to say "test my app" and watch Kiro do it.
+| Recurso do Kiro | Como você utilizou |
+| :--- | :--- |
+| **Configuração de MCP** | Parametrizou manualmente o servidor do Playwright em `mcp.json` |
+| **Ferramentas de Automação** | Empregou métodos de navegador para validar as funcionalidades do jogo |
+| **Testes End-to-End** | Validou regras de vitória, placar e empates com simulação de usuário |
+| **Snapshot de Acessibilidade** | Analisou a conformidade de a11y com o método `browser_snapshot` |
+| **Evidências Visuais** | Registrou capturas de tela dos testes executados |
+| **Provedor `#mcp`** | Invocou comandos de ferramentas externas dentro do chat |
+| **Bugfix Specs** | Estruturou correções delimitando comportamentos esperados e inalterados |
+| **MCP vs Powers** | Identificou quando optar por configurações puras ou pacotes integrados |
 
 ---
 
-## What's Next
+## Ponto Principal
 
-You've been working inside the IDE this whole time. In the next step, you'll take Kiro to the terminal with the **Kiro CLI** — a full agent experience for developers who prefer the command line.
+O MCP estabelece o protocolo de comunicação entre o Kiro e ferramentas externas. Para rotinas de qualidade, o servidor do Playwright transforma o agente em um avaliador capaz de interagir com o sistema, simular fluxos e verificar o comportamento da aplicação em um navegador real.
+
+A parametrização exige apenas um arquivo JSON, viabilizando testes orientados por instruções simples em linguagem natural.
+
+---
+
+## Próximos Passos
+
+Até o momento, todo o trabalho ocorreu dentro do ambiente visual da IDE. No próximo passo, você levará o Kiro para o terminal utilizando a **Kiro CLI** — explorando a experiência do agente para desenvolvedores focados em linha de comando.
