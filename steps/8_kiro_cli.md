@@ -1,107 +1,105 @@
-# Step 8 — Kiro CLI
+# Passo 8 — Kiro CLI (Linha de Comando)
 
-> **Goal:** Take Kiro out of the IDE and into the terminal. Explore the Kiro CLI as a full development experience — interactive chat, custom agents, shell translation, session management, and MCP from the command line.
-
----
-
-## 8.1 — Kiro Beyond the IDE
-
-Everything you've done so far has been inside the Kiro IDE. But not every developer lives in an IDE. Some prefer the terminal. Some work over SSH. Some want Kiro alongside their existing tmux/vim/emacs workflow.
-
-The **Kiro CLI** is a full-featured agent experience for the terminal. It's not a stripped-down version — it has the same agent, same models, same steering, hooks, MCP, and skills as the IDE. Just a different interface.
+> **Objetivo:** Levar o Kiro além da IDE e utilizá-lo diretamente no terminal. Explorar a Kiro CLI como um ambiente de desenvolvimento completo — chat interativo, agentes personalizados, tradução de comandos shell, controle de sessões e operações MCP via linha de comando.
 
 ---
 
-## 8.2 — Installing the CLI
+## 8.1 — O Kiro Além da IDE
+
+Todas as atividades anteriores foram executadas no ambiente gráfico da IDE do Kiro. Contudo, muitos fluxos de desenvolvimento acontecem exclusivamente pelo terminal — seja trabalhando remotamente via SSH ou em conjunto com ferramentas como tmux, Neovim e Emacs.
+
+A **Kiro CLI** oferece a experiência do agente diretamente no terminal. Não se trata de uma versão simplificada: ela compartilha os mesmos agentes, modelos de IA, diretrizes de Steering, automações de Hooks, configurações de MCP e pacotes de Skills disponíveis na IDE.
+
+---
+
+## 8.2 — Instalando a CLI
 
 ### macOS / Linux
 
 ```bash
-curl -fsSL https://cli.kiro.dev/install | bash
+curl -fsSL [https://cli.kiro.dev/install](https://cli.kiro.dev/install) | bash
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
-irm 'https://cli.kiro.dev/install.ps1' | iex
+irm '[https://cli.kiro.dev/install.ps1](https://cli.kiro.dev/install.ps1)' | iex
 ```
 
-After installation, authenticate:
+Concluída a instalação, efetue a autenticação:
 
 ```bash
 kiro-cli login
 ```
 
-This opens your browser for authentication. You can use the same account (Google, GitHub, Builder ID, or IAM Identity Center) as the IDE. For remote/SSH environments, it uses a device flow — shows a code and URL you complete on another device.
+O comando abrirá uma janela no navegador para autenticação. É possível usar a mesma conta vinculada à sua IDE (Google, GitHub, Builder ID ou IAM Identity Center). Em terminais remotos ou sessões SSH, o sistema adota o fluxo de autenticação por dispositivo (*device code*), apresentando o código e a URL para validação externa.
 
-### Verify it works
+### Validando a Instalação
 
 ```bash
-kiro-cli whoami    # Check auth status
-kiro-cli version   # Check version
-kiro-cli doctor    # Diagnose common issues
+kiro-cli whoami    # Exibe o status da conta conectada
+kiro-cli version   # Apresenta a versão instalada da CLI
+kiro-cli doctor    # Executa diagnóstico para identificar pendências no ambiente
 ```
 
 ---
 
-## 8.3 — Interactive Chat
+## 8.3 — Chat Interativo no Terminal
 
-The simplest way to start:
+A forma mais simples de inicializar a ferramenta:
 
 ```bash
 cd tic-tac-toe
 kiro-cli
 ```
 
-This drops you into an interactive chat session with a rich terminal UI — syntax-highlighted code, interactive panels, and visual tool progress. It's not a bare-bones text prompt; it's a polished terminal experience.
+Isso inicializa uma sessão interativa de chat no terminal equipada com destaque de sintaxe para código, painéis organizados e acompanhamento das ações das ferramentas em tempo real.
 
-### Ask questions directly
+### Executando Perguntas Diretamente
 
-You can also pass a question as an argument to skip the interactive startup:
+Você pode passar a instrução diretamente como argumento sem precisar abrir a tela inicial interativa:
 
 ```bash
-kiro-cli chat "Explain the game logic in Board.tsx"
+kiro-cli chat "Explique a lógica de funcionamento do Board.tsx"
 ```
 
-### Try it out
+### Testando na Prática
 
-Open a terminal, `cd` into the tic-tac-toe project, and run `kiro-cli`. Ask it to do something with the game:
+Abra o terminal, navegue até a pasta do projeto do jogo da velha e inicie o `kiro-cli`. Solicite uma análise da aplicação:
 
-```
-Explain how the win detection works in the tic-tac-toe game
-```
-
-Then ask it to make a change:
-
-```
-Add a move counter that shows how many moves have been played in the current game
+```text
+Explique como funciona a identificação de vitória no jogo da velha
 ```
 
-Notice that it reads files, writes code, runs commands, and follows the steering files you set up in Step 4 — all from the terminal.
+Em seguida, peça uma modificação no código:
+
+```text
+Adicione um contador de movimentos mostrando quantas jogadas já foram feitas na partida atual
+```
+
+Observe que ele lê arquivos, gera código, roda comandos e respeita os manuais de Steering configurados no Passo 4 — tudo diretamente pela linha de comando.
 
 ---
 
-## 8.4 — Shell Translation
+## 8.4 — Tradução de Comandos Shell
 
-One of the CLI's most useful features for day-to-day work. Translate natural language into shell commands:
-
-```bash
-kiro-cli translate "find all TypeScript files modified today"
-```
-
-Kiro outputs the actual shell command. You can generate multiple options:
+Um dos recursos mais úteis da CLI para agilizar rotinas operacionais: traduzir descrições em linguagem comum para comandos shell prontos para execução:
 
 ```bash
-kiro-cli translate -n 3 "compress all log files older than 30 days"
+kiro-cli translate "localize todos os arquivos TypeScript alterados hoje"
 ```
 
-This is handy even outside of project work — it's a smarter `man` page.
+O Kiro retorna a sintaxe exata do comando no terminal. Você também pode solicitar variações de alternativas:
+
+```bash
+kiro-cli translate -n 3 "compacte todos os arquivos de log com mais de 30 dias"
+```
 
 ---
 
-## 8.5 — Running Shell Commands Inline
+## 8.5 — Execução de Comandos Shell sem Sair do Chat
 
-Inside a chat session, prefix any command with `!` to run it directly without going through the AI:
+Durante uma sessão de chat interativa, utilize o prefixo `!` para executar comandos shell diretamente no seu sistema operacional:
 
 ```bash
 !npm run build
@@ -109,288 +107,257 @@ Inside a chat session, prefix any command with `!` to run it directly without go
 !npm test
 ```
 
-Output streams in real time. TTY commands like `vim`, `ssh`, and `top` get full terminal access. Long output collapses to a head + tail view — press `Ctrl+O` to expand.
+O retorno é transmitido em tempo real. Comandos com suporte a TTY interativo (como `vim`, `ssh` e `top`) operam normalmente. Saídas muito longas são resumidas automaticamente nas linhas iniciais e finais — pressione `Ctrl+O` para expandir a visualização completa.
 
-This means you never have to leave the chat session to run a quick command.
-
----
-
-## 8.6 — Multi-Line Input and the Editor
-
-For longer prompts, you have several options:
-
-- **Shift+Enter** — Insert a newline (works in iTerm2, Ghostty, Kitty, Warp, Zed)
-- **Ctrl+J** — Insert a newline (works in all terminals including tmux)
-- **Alt+Enter** — Insert a newline (works in Terminal.app and Ghostty)
-- **`/editor`** — Opens your default editor (vi by default) for composing longer prompts
-
-The `/editor` command is great when you want to write a detailed multi-paragraph prompt without fighting the terminal input.
+Isso elimina a necessidade de suspender ou fechar a conversa para rodar comandos rápidos.
 
 ---
 
-## 8.7 — Slash Commands in Chat
+## 8.6 — Prompts em Múltiplas Linhas e Editor Externo
 
-Inside a chat session, type `/` to see available slash commands:
+Para instruções mais elaboradas, você tem diferentes alternativas:
 
-| Command    | What it does                                       |
-| ---------- | -------------------------------------------------- |
-| `/model`   | Switch the AI model mid-conversation               |
-| `/tools`   | View and search available tools                    |
-| `/agent`   | Switch to a different custom agent                 |
-| `/compact` | Compact the conversation to free up context        |
-| `/context` | Manage file context                                |
-| `/chat`    | Session management (new, resume, save, load)       |
-| `/editor`  | Open editor for multi-line input                   |
-| `/reply`   | Open editor with the last assistant message quoted |
-| `/help`    | Show all available commands                        |
+- **Shift+Enter** — Quebra a linha no cursor (compatível com iTerm2, Ghostty, Kitty, Warp, Zed)
+- **Ctrl+J** — Insere uma quebra de linha (funciona em todos os terminais, incluindo sessões tmux)
+- **Alt+Enter** — Insere uma quebra de linha (padrão em Terminal.app e Ghostty)
+- **`/editor`** — Abre o seu editor de texto padrão (como vim ou nano) para escrever prompts longos
 
-These mirror many of the IDE's features — model switching, tool discovery, and context management — all from the keyboard.
+O comando `/editor` é ideal para estruturar solicitações detalhadas sem limitações do prompt de comando.
 
 ---
 
-## 8.8 — Context Management
+## 8.7 — Comandos de Barra (Slash Commands) no Chat
 
-Control what files Kiro sees in the current session:
+Dentro de uma conversa interativa, digite `/` para visualizar as opções disponíveis:
+
+| Comando | Descrição |
+| :--- | :--- |
+| `/model` | Alterna o modelo de IA utilizado durante a sessão |
+| `/tools` | Consulta e pesquisa ferramentas ativas no ambiente |
+| `/agent` | Alterna para um agente configurado sob medida |
+| `/compact` | Compacta o histórico para otimizar o uso da janela de contexto |
+| `/context` | Gerencia os arquivos carregados no contexto |
+| `/chat` | Controle de sessões (iniciar nova, retomar, salvar ou carregar) |
+| `/editor` | Abre o editor de texto para escrever o prompt |
+| `/reply` | Abre o editor trazendo a última resposta do agente citada |
+| `/help` | Apresenta a lista de comandos suportados |
+
+---
+
+## 8.8 — Gerenciamento de Contexto
+
+Você pode controlar quais arquivos farão parte do escopo da conversa através de padrões glob:
 
 ```bash
-/context show              # See what's in context with per-file token usage
-/context add "src/**/*.ts" # Add files by glob pattern
-/context remove src/app.js # Remove a file
-/context clear             # Remove all context rules
+/context show               # Exibe os arquivos carregados e a contagem de tokens consumidos
+/context add "src/**/*.ts"  # Adiciona arquivos com base em padrões glob
+/context remove src/app.js  # Remove um arquivo específico do escopo
+/context clear              # Limpa todas as regras personalizadas de contexto
 ```
 
-This is the CLI equivalent of the `#file` and `#folder` context providers in the IDE — but with glob patterns for more precise control.
-
 ---
 
-## 8.9 — Session Management
+## 8.9 — Gerenciamento de Sessões
 
-The CLI saves every conversation automatically. You can resume, list, and manage sessions:
+A CLI armazena os históricos das conversas de forma automática, permitindo listar, continuar ou transferir sessões:
 
 ```bash
-# Resume the most recent session in this directory
+# Retoma a sessão mais recente vinculada a este diretório
 kiro-cli chat --resume
 
-# Pick from a list of previous sessions
+# Abre um seletor visual com as sessões anteriores
 kiro-cli chat --resume-picker
 
-# List all saved sessions for this directory
+# Lista todas as conversas salvas para o diretório atual
 kiro-cli chat --list-sessions
 
-# Resume a specific session by ID
+# Abre uma sessão específica utilizando seu identificador
 kiro-cli chat --resume-id abc123-def456
 ```
 
-Inside a session, you can also:
+Dentro de uma conversa aberta, você também pode usar:
 
 ```bash
-/chat new              # Start a fresh conversation (saves current)
-/chat new "add a timer"  # Start fresh with an initial prompt
-/chat resume           # Pick a previous session to resume
-/chat save ./session.json   # Export session to a file
-/chat load ./session.json   # Load a session from a file
+/chat new                  # Inicia uma nova sessão salvando a atual
+/chat new "adicione timer" # Inicia uma nova conversa já passando o prompt inicial
+/chat resume               # Abre o seletor para alternar entre conversas
+/chat save ./sessao.json   # Exporta os dados da conversa para um arquivo JSON
+/chat load ./sessao.json   # Restaura uma conversa salva anteriormente
 ```
 
-Sessions are stored per directory, so each project has its own history.
+O histórico é indexado por diretório, mantendo os registros de cada projeto separados.
 
-### Exporting conversations (IDE comparison)
+### Exportando Históricos (Comparativo com a IDE)
 
-In the IDE, you can export a conversation by right-clicking the chat tab and selecting **Export Conversation** — it saves as a markdown file. The CLI equivalent is `/chat save`, which exports to JSON. Both are useful for sharing sessions with teammates or keeping a record of how a feature was built.
+Na IDE, você pode exportar uma conversa clicando com o botão direito na aba do chat e escolhendo **Export Conversation** (que salva como Markdown). Na CLI, utiliza-se `/chat save`, exportando para o formato JSON. Ambos os métodos facilitam compartilhar o histórico da implementação com outros membros do time.
 
 ---
 
-## 8.10 — Custom Agents
+## 8.10 — Agentes Customizados
 
-Create specialized agent configurations for different workflows:
-
-```bash
-kiro-cli agent list                       # List available agents
-kiro-cli agent create code-reviewer       # Create a new agent
-kiro-cli agent edit code-reviewer         # Edit its config
-kiro-cli agent set-default code-reviewer  # Set as default
-```
-
-Then use it:
+Você pode definir agentes voltados para finalidades específicas de engenharia:
 
 ```bash
-kiro-cli chat --agent code-reviewer "Review the latest changes to the game logic"
+kiro-cli agent list                        # Lista os agentes configurados
+kiro-cli agent create revisor-codigo       # Cria um novo perfil de agente
+kiro-cli agent edit revisor-codigo         # Edita os parâmetros e prompts do perfil
+kiro-cli agent set-default revisor-codigo  # Define o perfil como agente padrão
 ```
 
-Custom agents let you define different system prompts, tool permissions, and behaviors for different tasks — a code reviewer agent, a documentation agent, a debugging agent.
+Para chamá-lo diretamente:
+
+```bash
+kiro-cli chat --agent revisor-codigo "Revise as alterações recentes na lógica da partida"
+```
+
+Agentes personalizados permitem parametrizar system prompts exclusivos, permissões de ferramentas e comportamentos ajustados para revisão, documentação ou triagem de falhas.
 
 ---
 
-## 8.11 — MCP from the Terminal
+## 8.11 — Gerenciamento de MCP pelo Terminal
 
-Manage MCP servers without touching JSON files:
+Você pode configurar servidores MCP diretamente por linha de comando sem precisar abrir o arquivo JSON:
 
 ```bash
-kiro-cli mcp list                      # List configured servers
+kiro-cli mcp list                                  # Lista os servidores MCP ativos
 kiro-cli mcp add --name playwright \
   --command "npx" \
-  --scope workspace                    # Add a server
-kiro-cli mcp status --name playwright  # Check connection status
-kiro-cli mcp remove --name playwright  # Remove a server
-kiro-cli mcp import --file config.json workspace  # Import from file
+  --scope workspace                                # Registra um novo servidor
+kiro-cli mcp status --name playwright              # Valida o estado da conexão
+kiro-cli mcp remove --name playwright              # Descadastra o servidor
+kiro-cli mcp import --file config.json workspace   # Importa definições de um arquivo JSON
 ```
-
-This is useful when you're setting up a project on a new machine or configuring servers in a remote environment.
 
 ---
 
-## 8.12 — Inline Suggestions
+## 8.12 — Sugestões Inline no Shell
 
-The CLI can provide ghost-text suggestions as you type commands in your shell:
+A CLI suporta autocompletar em estilo texto-fantasma (*ghost text*) conforme você digita no terminal:
 
 ```bash
-kiro-cli inline enable     # Turn on inline suggestions
-kiro-cli inline disable    # Turn off
-kiro-cli inline status     # Check current status
+kiro-cli inline enable     # Ativa as sugestões automáticas inline
+kiro-cli inline disable    # Desativa a exibição
+kiro-cli inline status     # Confere o estado atual do recurso
 ```
 
 ---
 
-## 8.13 — Kiro Command Router
+## 8.13 — Roteador de Comandos do Kiro
 
-If you use both the IDE and CLI, the command router lets you control what `kiro` does:
+Caso você utilize tanto a versão CLI quanto a interface desktop, o roteador permite parametrizar qual aplicação responderá ao comando `kiro`:
 
 ```bash
 kiro-cli integrations install kiro-command-router
 
-# Set CLI as the default for the `kiro` command
+# Define a CLI como padrão para a chamada do comando `kiro`
 kiro set-default cli
 
-# Or keep IDE as the default
+# Ou mantenha a IDE como resposta padrão
 kiro set-default ide
 ```
 
-After this:
+Após essa definição:
 
-- `kiro` → launches your default (CLI or IDE)
-- `kiro-cli` → always launches CLI
-- `kiro ide` → always launches IDE
+- `kiro` → Abre o ambiente configurado como padrão (CLI ou IDE)
+- `kiro-cli` → Sempre abrirá o terminal interativo
+- `kiro ide` → Sempre abrirá a interface visual da IDE
 
 ---
 
-## 8.14 — Housekeeping Commands
+## 8.14 — Comandos de Manutenção
 
-A few more commands that round out the CLI experience:
+Recursos auxiliares para administração da ferramenta:
 
-### Update
+### Atualização
 
 ```bash
-kiro-cli update                  # Update to the latest version
-kiro-cli update --non-interactive  # Update without confirmation (for scripts)
+kiro-cli update                    # Atualiza a CLI para a versão mais recente
+kiro-cli update --non-interactive  # Atualiza sem solicitar confirmação (ideal para automações)
 ```
 
-### Theme
+### Temas da Interface
 
 ```bash
-kiro-cli theme --list    # See available themes
-kiro-cli theme dark      # Set dark theme
-kiro-cli theme light     # Set light theme
-kiro-cli theme system    # Follow system preference
+kiro-cli theme --list    # Lista os esquemas visuais disponíveis
+kiro-cli theme dark      # Aplica o tema escuro
+kiro-cli theme light     # Aplica o tema claro
+kiro-cli theme system    # Alinha a interface com a preferência do sistema operacional
 ```
 
-### Settings
+### Configurações
 
 ```bash
-kiro-cli settings list           # View current settings
-kiro-cli settings list --all     # View all available settings with descriptions
-kiro-cli settings open           # Open settings file in your editor
-kiro-cli settings telemetry.enabled false  # Set a specific setting
+kiro-cli settings list                      # Lista os parâmetros de configuração ativos
+kiro-cli settings list --all                # Apresenta todas as variáveis com explicações
+kiro-cli settings open                      # Abre o arquivo de parâmetros no seu editor padrão
+kiro-cli settings telemetry.enabled false   # Modifica um parâmetro diretamente
 ```
 
-### Diagnostics
+### Diagnósticos e Reporte
 
 ```bash
-kiro-cli doctor        # Quick check for common issues
-kiro-cli diagnostic    # Full system report (OS, version, environment, config)
-```
-
-### Report issues
-
-```bash
-kiro-cli issue "Autocomplete not working in zsh"  # Create a GitHub issue
+kiro-cli doctor                                    # Checagem rápida de dependências do ambiente
+kiro-cli diagnostic                                # Gera relatório com sistema, ambiente e configurações
+kiro-cli issue "Autocompletar com falha no zsh"    # Cria uma issue no repositório do projeto
 ```
 
 ---
 
-## 8.15 — Everything from the IDE Works Here Too
+## 8.15 — Compatibilidade Total com a IDE
 
-One thing to emphasize: the CLI isn't a separate product. It shares:
+É fundamental ressaltar: a CLI utiliza a mesma base de configurações da interface gráfica:
 
-- **Steering files**: Same `.kiro/steering/` files apply
-- **Hooks**: Same `.kiro/hooks/` automation fires
-- **MCP servers**: Same `.kiro/settings/mcp.json` config
-- **Skills**: Same `.kiro/skills/` packages activate
-- **Powers**: Same installed powers activate by keyword
-- **Models**: Same model selection and credit system
+- **Steering**: Os arquivos de `.kiro/steering/` são carregados da mesma forma
+- **Hooks**: As regras de automação em `.kiro/hooks/` operam com os mesmos gatilhos
+- **Servidores MCP**: As conexões de `.kiro/settings/mcp.json` continuam ativas
+- **Skills**: Os pacotes de `.kiro/skills/` ativam-se sob demanda
+- **Powers**: As Powers instaladas entram em execução pelas palavras-chave correspondentes
+- **Modelos e Créditos**: O consumo e a seleção de modelos são unificados
 
-If you set up steering in Step 4 and hooks in Step 5, they work identically in the CLI. No reconfiguration needed.
+Tudo o que foi parametrizado nas etapas anteriores funciona de forma idêntica no terminal, sem necessidade de reconfiguração.
 
 ---
 
-## 8.16 — Autocomplete
+## 8.16 — Autocompletar no Shell
 
-The CLI integrates with your shell for intelligent command completion:
+A CLI integra-se ao seu interpretador de shell para oferecer completude de comandos com a tecla Tab:
 
 ```bash
-kiro-cli integrations install    # Set up shell autocomplete
-kiro-cli integrations status     # Check if it's active
+kiro-cli integrations install    # Instala o suporte a autocompletar no seu shell
+kiro-cli integrations status     # Valida se a integração está operando
 ```
 
-Once installed, tab-completion works for `kiro-cli` commands, subcommands, and flags.
+---
+
+## 8.17 — Recapitulação
+
+| Recurso do Kiro | Como você utilizou |
+| :--- | :--- |
+| **Kiro CLI** | Utilizou a experiência do agente diretamente pelo terminal |
+| **Instalação via Script** | Configurou a CLI em linha única no sistema operacional |
+| **Chat Interativo** | Executou consultas e alterações na aplicação sem abrir a IDE |
+| **Tradução Shell** | Converteu linguagem natural em sintaxe de comandos |
+| **Comandos com `!`** | Executou rotinas do sistema operacional sem interromper o chat |
+| **Entrada Multilinha** | Utilizou atalhos e o comando `/editor` para prompts elaborados |
+| **Comandos de Barra** | Gerenciou modelos, contexto e ferramentas com `/` |
+| **Gestão de Sessões** | Retomou, salvou e exportou conversas locais |
+| **Agentes Personalizados** | Parametrizou perfis de agente para tarefas específicas |
+| **Administração de MCP** | Gerenciou conexões de servidores MCP via terminal |
+| **Configuração Unificada** | Comprovou que diretrizes, hooks, skills e powers operam de forma equivalente na CLI |
 
 ---
 
-## 8.17 — Recap
+## Resumo Geral do Workshop
 
-| Kiro Feature           | How you used it                                                       |
-| ---------------------- | --------------------------------------------------------------------- |
-| **Kiro CLI**           | Full interactive chat in the terminal                                 |
-| **CLI installation**   | One-line install on macOS/Linux/Windows                               |
-| **Interactive chat**   | Asked questions and made changes to the game                          |
-| **Shell translation**  | Translated natural language to shell commands                         |
-| **Inline commands**    | Ran shell commands with `!` without leaving chat                      |
-| **Multi-line input**   | Shift+Enter, Ctrl+J, `/editor` for longer prompts                     |
-| **Slash commands**     | `/model`, `/tools`, `/compact`, `/context`, `/chat`                   |
-| **Context management** | Controlled file context with `/context` and glob patterns             |
-| **Session management** | Resumed, listed, saved, and loaded sessions                           |
-| **Session export**     | Exported conversations (CLI: `/chat save`, IDE: right-click → Export) |
-| **Custom agents**      | Created specialized agent configurations                              |
-| **MCP from CLI**       | Managed MCP servers via command line                                  |
-| **Inline suggestions** | Ghost-text completions in the shell                                   |
-| **Command router**     | Configured `kiro` to launch CLI or IDE                                |
-| **Themes**             | Switched terminal UI between dark/light/system                        |
-| **Settings**           | Viewed and configured CLI settings                                    |
-| **Update**             | Self-updated to the latest version                                    |
-| **Autocomplete**       | Shell tab-completion for commands                                     |
-| **Shared config**      | Steering, hooks, MCP, skills, powers all work identically             |
+Você cobriu toda a extensão da plataforma Kiro — desde a construção inicial guiada por uma imagem até especificações com Specs, instalação de Skills, padronização técnica com Steering, automações com Hooks, integrações via Powers, validação E2E com Playwright MCP e uso da ferramenta via terminal:
 
----
-
-## Key Takeaway
-
-The Kiro CLI isn't a secondary tool — it's a first-class development experience. Everything you can do in the IDE chat, you can do in the terminal. For developers who live in the command line, it's the natural way to work with Kiro. And because it shares the same steering, hooks, MCP, and skills, switching between IDE and CLI is seamless.
-
----
-
-## What's Next
-
-That's a wrap. You've covered the full Kiro platform — from scaffolding a game with a picture, to structured specs, skills, steering, hooks, powers, MCP testing, and now the CLI. All on the free tier.
-
-| Step | Feature              | What you did                                                          |
-| ---- | -------------------- | --------------------------------------------------------------------- |
-| 1    | **IDE + Vibe mode**  | Toured Kiro, scaffolded the game from a picture                       |
-| 2    | **Specs**            | Added a backend with structured requirements → design → tasks         |
-| 3    | **Skills**           | Installed frontend-design and React best practices skills             |
-| 4    | **Steering**         | Taught Kiro your project conventions                                  |
-| 5    | **Hooks**            | Automated build checks, accessibility reviews, post-task verification |
-| 6    | **Powers**           | Extended Kiro with external service integrations                      |
-| 7    | **MCP + Playwright** | Configured raw MCP, tested the game in a real browser                 |
-| 8    | **Kiro CLI**         | Full agent experience in the terminal                                 |
-
-From a picture of a tic-tac-toe board to a full-stack, tested, deployable application — built with you driving the decisions. That's Kiro.  
-
-If you have more time, keep on exploring and see what else you can build!
+| Etapa | Foco | O que foi construído |
+| :--- | :--- | :--- |
+| 1 | **IDE + Modo Vibe** | Conheceu a IDE e estruturou o app a partir de uma foto |
+| 2 | **Specs** | Implementou backend com o fluxo requisitos → design → tarefas |
+| 3 | **Skills** | Adicionou boas práticas de design e performance em React |
+| 4 | **Steering** | Formalizou as diretrizes e convenções de arquitetura da aplicação |
+| 5 | **Hooks** | Criou automações de build e validações de qualidade |
+| 6 | **Powers** | Conectou o projeto a serviços externos de nuvem e banco de dados |
+| 7 | **MCP + Playwright** | Configurou MCP manual e testou a aplicação em um navegador real |
+| 8 | **Kiro CLI** | Operou todas as capacidades da plataforma direto da linha de comando |
