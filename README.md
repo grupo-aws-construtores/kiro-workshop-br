@@ -19,16 +19,16 @@ Comece por aqui: [`steps/1_kicking_things_off.md`](steps/1_kicking_things_off.md
 
 ## Passos do Workshop
 
-| #   | Passo                                                         | Foco                                                                                                               |
-| --- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| 1   | [Dando o Pontapé Inicial](steps/1_kicking_things_off.md)       | Tour pela IDE do Kiro, uso do modo Vibe e Autopilot, estruturação (*scaffold*) do app React + Vite + TS a partir de uma imagem |
-| 2   | [Desenvolvimento Orientado a Especificações](steps/2_spec_driven_development.md) | Criar uma Spec e navegar pelo fluxo de requisitos → design → tarefas para adicionar backend em Node.js + Express  |
-| 3   | [Adicionando Skills](steps/3_adding_skills.md)                | Instalar a *skill* de design frontend da Anthropic e de boas práticas em React da Vercel para redesenhar a interface |
-| 4   | [Steering (Diretrizes e Convenções)](steps/4_steering.md)     | Gerar diretrizes essenciais (produto, tecnologia, estrutura), definir convenções customizadas e modos de inclusão  |
-| 5   | [Hooks (Automações)](steps/5_hooks.md)                        | Automatizar rotinas com hooks `fileEdited`, `preToolUse` e `postTaskExecution` para builds e revisão de acessibilidade |
-| 6   | [Powers (Integrações e Infra)](steps/6_powers.md)              | Instalar uma Power (Netlify, Amplify, Supabase, CDK ou outra) para deploy, dados ou infraestrutura                 |
-| 7   | [MCP e Testes Automatizados](steps/7_mcp_and_testing.md)      | Configurar o servidor MCP do Playwright e fazer o Kiro jogar e validar a aplicação em um navegador real            |
-| 8   | [Kiro CLI (Linha de Comando)](steps/8_kiro_cli.md)            | Operar o Kiro pelo terminal: chat interativo, tradução de comandos shell, sessões, agentes customizados e gestão de MCP |
+| #   | Passo                                                                     | Foco                                                                                                                             |
+| --- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | [Dando o Pontapé Inicial](steps/1_kicking_things_off.md)                  | Tour pela IDE do Kiro, uso do modo Vibe e Autopilot, estruturação (*scaffold*) do app React + Vite + TS a partir de uma imagem |
+| 2   | [Desenvolvimento Orientado a Especificações](steps/2_spec_driven_development.md) | Criar uma Spec e navegar pelo fluxo de requisitos → design → tarefas para adicionar backend em Node.js + Express                 |
+| 3   | [Adicionando Skills](steps/3_adding_skills.md)                            | Instalar a *skill* de design frontend da Anthropic e de boas práticas em React da Vercel para redesenhar a interface           |
+| 4   | [Steering (Diretrizes e Convenções)](steps/4_steering.md)                 | Gerar diretrizes essenciais (produto, tecnologia, estrutura), definir convenções customizadas e modos de inclusão                |
+| 5   | [Hooks (Automações)](steps/5_hooks.md)                                    | Automatizar rotinas com hooks `fileEdited`, `preToolUse` e `postTaskExecution` para builds e revisão de acessibilidade           |
+| 6   | [Powers (Integrações e Infra)](steps/6_powers.md)                         | Instalar uma Power (Netlify, Amplify, Supabase, CDK ou outra) para deploy, dados ou infraestrutura                                |
+| 7   | [MCP e Testes Automatizados](steps/7_mcp_and_testing.md)                  | Configurar o servidor MCP do Playwright e fazer o Kiro jogar e validar a aplicação em um navegador real                           |
+| 8   | [Kiro CLI (Linha de Comando)](steps/8_kiro_cli.md)                        | Operar o Kiro pelo terminal: chat interativo, tradução de comandos shell, sessões, agentes customizados e gestão de MCP        |
 
 ## O que Você Vai Construir
 
@@ -44,16 +44,21 @@ Ao término do workshop, você terá:
 
 ## Estrutura do Repositório
 
+```text
+.
 ├── README.md
 ├── .gitignore
 └── steps/
-├── 1_kicking_things_off.md
-├── 2_spec_driven_development.md
-├── 3_adding_skills.md
-├── 4_steering.md
-├── 5_hooks.md
-├── 6_powers.md
-├── 7_mcp_and_testing.md
-└── 8_kiro_cli.md
+    ├── 1_kicking_things_off.md
+    ├── 2_spec_driven_development.md
+    ├── 3_adding_skills.md
+    ├── 4_steering.md
+    ├── 5_hooks.md
+    ├── 6_powers.md
+    ├── 7_mcp_and_testing.md
+    └── 8_kiro_cli.md
 
-Arquivos e pastas gerados durante a execução do workshop (`node_modules/`, `dist/`, `.vite/`, `.playwright-mcp/`, etc.) já estão cobertos pelo `.gitignore`.
+
+
+
+Arquivos e pastas gerados durante a execução do workshop (node_modules/, dist/, .vite/, .playwright-mcp/, etc.) já estão cobertos pelo .gitignore.
