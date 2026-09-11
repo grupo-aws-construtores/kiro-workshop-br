@@ -1,250 +1,238 @@
-# Step 6 — Powers
+# Passo 6 — Powers (Integrações e Infraestrutura)
 
-> **Goal:** Extend Kiro with Powers — curated tool bundles that give the agent access to external services. Install a power, use it to do something real with your tic-tac-toe game, and see how powers activate dynamically based on context.
-
----
-
-## 6.1 — Why Powers?
-
-So far, everything you've done has been local — Kiro reads files, writes code, runs commands on your machine. But real projects need external services: deployment platforms, databases, observability tools, payment providers.
-
-You _could_ set up raw MCP servers for each of these. But that creates two problems:
-
-1. **Context overload** — Five MCP servers might load 100+ tool definitions into every conversation, eating 40% of the context window before you type a word.
-2. **Missing expertise** — Kiro has the tools but doesn't know the best practices. It can call the Stripe API but doesn't know to use idempotent keys.
-
-Powers solve both. A Power bundles:
-
-- **MCP server config**: The tools and connection details
-- **POWER.md**: Steering that teaches Kiro _how_ to use the tools well
-- **Hooks/steering**: Optional automation and workflow guidance
-
-They load **dynamically** — only when your conversation mentions relevant keywords. Talk about "deploy," the deployment power activates. Switch to "database," the DB power loads instead. No manual toggling.
+> **Objetivo:** Expandir as capacidades do Kiro com Powers — pacotes selecionados de ferramentas que conectam o agente a serviços externos. Instalar uma Power, utilizá-la em um caso prático com o jogo da velha e entender como elas se ativam dinamicamente com base no contexto.
 
 ---
 
-## 6.2 — The Powers Ecosystem
+## 6.1 — Por que usar Powers?
 
-Kiro has a growing catalog of curated powers from launch partners and the community. Here's a sampling organized by what you'd use them for:
+Até este ponto, todas as operações foram puramente locais — o Kiro leu arquivos, gerou código e executou comandos na sua máquina. Contudo, aplicações reais dependem de serviços de nuvem: plataformas de hospedagem, bancos de dados gerenciados, ferramentas de observabilidade e gateways de pagamento.
 
-### Deployment & Infrastructure
+Você *poderia* configurar servidores MCP manuais para cada um desses serviços. Mas isso geraria dois entraves:
 
-| Power                          | Provider  | What it does                                          |
-| ------------------------------ | --------- | ----------------------------------------------------- |
-| **Deploy with Netlify**        | Netlify   | Deploy React/Next.js/Vue apps to Netlify's global CDN |
-| **AWS Infrastructure as Code** | AWS       | Build infrastructure with CDK and CloudFormation      |
-| **AWS Amplify**                | AWS       | Full-stack apps with auth, data, storage, functions   |
-| **Terraform**                  | HashiCorp | Infrastructure as Code with Terraform                 |
-| **AWS SAM**                    | AWS       | Serverless applications with SAM                      |
-| **ECS Express Mode**           | Community | Deploy containers to AWS ECS with an HTTPS endpoint   |
+1. **Sobrecarga de contexto**: Cinco servidores MCP podem carregar mais de 100 definições de ferramentas a cada conversa, ocupando até 40% da sua janela de contexto antes mesmo da primeira instrução.
+2. **Ausência de conhecimento especializado**: O Kiro ganha as ferramentas, mas não necessariamente as melhores práticas. Ele consegue chamar a API do Stripe, mas pode não saber que precisa configurar chaves de idempotência.
 
-### Databases
+As Powers solucionam ambos os problemas agregando:
 
-| Power                 | Provider   | What it does                                         |
-| --------------------- | ---------- | ---------------------------------------------------- |
-| **Supabase (hosted)** | Supabase   | Postgres, auth, storage, real-time subscriptions     |
-| **Supabase (local)**  | Supabase   | Local Supabase development environment               |
-| **Neon**              | Neon       | Serverless Postgres with branching and scale-to-zero |
-| **Aurora PostgreSQL** | AWS        | Aurora-specific best practices                       |
-| **ClickHouse**        | ClickHouse | Analytics database management                        |
+- **Configuração de servidor MCP**: As ferramentas e os parâmetros de conexão necessários
+- **`POWER.md`**: Diretrizes de Steering que ensinam ao Kiro *como* usar essas ferramentas da forma correta
+- **Hooks e Steering opcionais**: Automações e fluxos de trabalho guiados
 
-### Design & Frontend
-
-| Power       | Provider | What it does                                          |
-| ----------- | -------- | ----------------------------------------------------- |
-| **Figma**   | Figma    | Implement designs from Figma files as production code |
-| **Miro**    | Miro     | Use Miro boards as source of truth for architecture   |
-| **Bria AI** | Bria     | AI image generation, editing, background removal      |
-
-### Observability & Security
-
-| Power                 | Provider | What it does                                    |
-| --------------------- | -------- | ----------------------------------------------- |
-| **Datadog**           | Datadog  | Query logs, metrics, traces for debugging       |
-| **Snyk**              | Snyk     | Security scanning and vulnerability remediation |
-| **AWS Observability** | AWS      | CloudWatch, CloudTrail, Application Signals     |
-
-### Payments
-
-| Power            | Provider     | What it does                     |
-| ---------------- | ------------ | -------------------------------- |
-| **Stripe**       | Stripe       | Payments, subscriptions, billing |
-| **Checkout.com** | Checkout.com | Global payments API              |
+Elas são carregadas de maneira **dinâmica**: ativam-se somente quando a sua conversa cita palavras-chave pertinentes. Ao falar de "deploy", a Power de implantação entra em ação. Ao migrar para "banco de dados", a Power correspondente assume, liberando o contexto anterior. Tudo sem chaves manuais.
 
 ---
 
-## 6.3 — Installing a Power
+## 6.2 — O Ecossistema de Powers
 
-Powers install with one click — no JSON config files, no CLI setup.
+O Kiro possui um catálogo crescente de Powers homologadas. Veja alguns exemplos divididos por categoria:
 
-### From the Kiro panel
+### Implantação e Infraestrutura (Deployment & Infrastructure)
 
-1. Open the **Powers** section in the Kiro panel (or use Command Palette → "Kiro: Configure Powers")
-2. Browse available powers
-3. Click **Install** on the one you want
-4. Kiro handles the MCP server setup automatically
+| Power | Provedor | O que faz |
+| :--- | :--- | :--- |
+| **Deploy with Netlify** | Netlify | Faz deploy de aplicações React/Next.js/Vue para a CDN global da Netlify |
+| **AWS Infrastructure as Code** | AWS | Constrói infraestrutura com CDK e CloudFormation |
+| **AWS Amplify** | AWS | Cria aplicações full-stack com autenticação, dados, storage e funções |
+| **Terraform** | HashiCorp | Provisiona infraestrutura como código utilizando Terraform |
+| **AWS SAM** | AWS | Modela e implementa aplicações serverless com AWS SAM |
+| **ECS Express Mode** | Comunidade | Faz deploy de containers no AWS ECS com terminação HTTPS |
 
-### From kiro.dev
+### Bancos de Dados (Databases)
 
-1. Go to [kiro.dev/powers](https://kiro.dev/powers/)
-2. Find the power you want
-3. Click **Install** — it opens Kiro and installs directly
+| Power | Provedor | O que faz |
+| :--- | :--- | :--- |
+| **Supabase (hosted)** | Supabase | Fornece Postgres em nuvem, autenticação, storage e assinaturas em tempo real |
+| **Supabase (local)** | Supabase | Sobe ambiente local de desenvolvimento com Supabase |
+| **Neon** | Neon | Entrega Postgres serverless com branching e redução de consumo a zero |
+| **Aurora PostgreSQL** | AWS | Aplica as melhores práticas de arquitetura específicas para o Amazon Aurora |
+| **ClickHouse** | ClickHouse | Gerencia bancos de dados voltados para processamento analítico |
 
----
+### Design e Frontend
 
-## 6.4 — Try It: Pick Something and Go
+| Power | Provedor | O que faz |
+| :--- | :--- | :--- |
+| **Figma** | Figma | Converte designs e telas do Figma em código pronto para produção |
+| **Miro** | Miro | Utiliza quadros do Miro como base de requisitos e arquitetura |
+| **Bria AI** | Bria | Gera, edita e remove fundos de imagens utilizando inteligência artificial |
 
-You've got a working tic-tac-toe game with a backend. Now pick a direction and let a Power handle the heavy lifting. Here are some paths — choose whichever sounds interesting to you.
+### Observabilidade e Segurança
 
-### Option A: Deploy to Netlify
+| Power | Provedor | O que faz |
+| :--- | :--- | :--- |
+| **Datadog** | Datadog | Consulta logs, métricas e rastreamentos de telemetria para depuração |
+| **Snyk** | Snyk | Realiza varreduras de segurança e auxilia na mitigação de vulnerabilidades |
+| **AWS Observability** | AWS | Integração com CloudWatch, CloudTrail e Application Signals |
 
-Install the **Netlify** power, then ask Kiro:
+### Pagamentos
 
-```
-Deploy the tic-tac-toe game to Netlify.
-Set up the build configuration and get me a live URL.
-```
-
-Kiro will:
-
-- Activate the Netlify power (triggered by keywords "deploy" and "Netlify")
-- Use Netlify's MCP tools to create a site and configure the build
-- Follow best practices from the power's built-in POWER.md steering
-- Deploy and give you a live URL
-
-### Option B: Deploy to AWS with Amplify
-
-Install the **AWS Amplify** power, then ask:
-
-```
-Deploy the tic-tac-toe game to AWS using Amplify.
-Set up hosting for the frontend and a serverless backend.
-```
-
-Kiro will:
-
-- Activate the Amplify power
-- Set up Amplify Gen 2 with TypeScript
-- Configure hosting, backend functions, and data models
-- Deploy to AWS
-
-### Option C: Add a real database with Supabase
-
-Install the **Supabase** power, then ask:
-
-```
-Replace the in-memory data store with Supabase.
-Set up a Postgres database for game results and the leaderboard.
-Use Supabase's auth for player accounts.
-```
-
-Kiro will:
-
-- Activate the Supabase power
-- Create tables for games and players
-- Set up Row Level Security policies
-- Integrate the Supabase client into the React frontend
-- Replace the Express in-memory store with Supabase queries
-
-### Option D: Deploy infrastructure to AWS with CDK
-
-Install the **AWS Infrastructure as Code** power, then ask:
-
-```
-Create a CDK stack to deploy the tic-tac-toe backend as a Lambda function
-behind API Gateway, with a DynamoDB table for game storage.
-```
-
-Kiro will:
-
-- Activate the AWS IaC power
-- Generate a CDK stack with Lambda, API Gateway, and DynamoDB
-- Follow AWS Well-Architected best practices
-- Validate the CloudFormation template
-
-### Option E: Something else entirely
-
-The catalog has 50+ powers. Security scanning with Snyk? Observability with Datadog? Image generation with Bria? Install whatever catches your eye and point Kiro at it.
+| Power | Provedor | O que faz |
+| :--- | :--- | :--- |
+| **Stripe** | Stripe | Gerencia pagamentos, faturamento recorrente e assinaturas |
+| **Checkout.com** | Checkout.com | Integração global de APIs para meios de pagamento |
 
 ---
 
-## 6.5 — How Dynamic Activation Works
+## 6.3 — Instalando uma Power
 
-After installing a power, try this sequence to see the dynamic loading in action:
+As Powers podem ser instaladas com um clique — sem necessidade de lidar com arquivos JSON complexos ou parâmetros manuais de CLI.
 
-1. **Start a conversation about something unrelated** — "Explain the game logic in App.tsx." The power stays dormant. No extra tools loaded.
-2. **Then mention the power's domain** — "Now deploy this to Netlify." The power activates. Kiro loads the MCP tools and POWER.md steering.
-3. **Switch topics again** — "Add a new game mode." The power deactivates. Context is freed up.
+### Pelo painel do Kiro
 
-This is the difference between Powers and raw MCP servers. With raw MCP, all tools load all the time. With Powers, Kiro loads what's relevant and unloads what's not.
+1. Abra a seção **Powers** no painel lateral do Kiro (ou use `Cmd+Shift+P` → "Kiro: Configure Powers").
+2. Navegue pelas opções disponíveis no catálogo.
+3. Clique em **Install** na Power desejada.
+4. O Kiro configura a conexão do servidor MCP de forma automática.
+
+### Pelo portal kiro.dev
+
+1. Acesse o catálogo em [kiro.dev/powers](https://kiro.dev/powers/).
+2. Localize a integração que procura.
+3. Clique em **Install** — seu navegador solicitará abertura no Kiro para concluir a instalação.
 
 ---
 
-## 6.6 — What's Inside a Power
+## 6.4 — Prática: Escolha um Caminho
 
-If you're curious, here's the anatomy. Every power is a folder with:
+Você já possui o jogo da velha com backend integrado. Agora, escolha uma direção prática para utilizar uma Power:
+
+### Opção A: Deploy na Netlify
+
+Instale a Power **Netlify** e solicite no chat do Kiro:
+
+```text
+Faça o deploy do jogo da velha na Netlify.
+Configure os parâmetros de build necessários e forneça a URL pública do projeto.
+```
+
+O Kiro irá:
+
+- Ativar a Power da Netlify (identificada pelos termos "deploy" e "Netlify")
+- Acionar as ferramentas MCP da Netlify para registrar o projeto e compilar
+- Adotar as práticas recomendadas contidas no arquivo `POWER.md`
+- Disponibilizar o link funcional no final
+
+### Opção B: Deploy na AWS via AWS Amplify
+
+Instale a Power **AWS Amplify** e solicite:
+
+```text
+Faça o deploy do jogo da velha na AWS utilizando o Amplify.
+Configure o hosting do frontend e o backend serverless.
+```
+
+O Kiro irá:
+
+- Ativar a Power do Amplify
+- Inicializar o Amplify Gen 2 com TypeScript
+- Provisionar hospedagem, funções de backend e modelagem de dados
+- Publicar a aplicação na sua infraestrutura da AWS
+
+### Opção C: Adicionar Banco de Dados com Supabase
+
+Instale a Power **Supabase** e peça:
+
+```text
+Substitua o armazenamento em memória pelo Supabase.
+Crie um banco de dados Postgres para persistir os resultados das partidas e o placar.
+Utilize a autenticação do Supabase para o login dos jogadores.
+```
+
+O Kiro irá:
+
+- Ativar a Power do Supabase
+- Criar a modelagem das tabelas de jogos e participantes
+- Configurar as políticas de segurança a nível de linha (*Row Level Security*)
+- Integrar o cliente do Supabase no frontend React
+- Atualizar os controladores Express para consultar o Postgres
+
+### Opção D: Infraestrutura na AWS com AWS CDK
+
+Instale a Power **AWS Infrastructure as Code** e envie:
+
+```text
+Crie uma stack de CDK para implantar o backend do jogo da velha como uma função Lambda
+integrada a um API Gateway, utilizando uma tabela do DynamoDB para persistência.
+```
+
+O Kiro irá:
+
+- Ativar a Power de AWS IaC
+- Elaborar a stack em CDK contemplando Lambda, API Gateway e DynamoDB
+- Aplicar os princípios do AWS Well-Architected Framework
+- Validar a sintaxe do template CloudFormation gerado
+
+### Opção E: Outras Alternativas
+
+O catálogo possui dezenas de integrações. Você pode testar análises de segurança com o Snyk, telemetria com Datadog ou geração visual com Bria AI de acordo com sua preferência.
+
+---
+
+## 6.5 — Como Funciona a Ativação Dinâmica
+
+Após adicionar uma Power, você pode observar o gerenciamento de contexto em ação:
+
+1. **Inicie uma conversa neutra** — "Explique a lógica de turnos no App.tsx". A Power permanece inativa e as ferramentas não consomem tokens.
+2. **Cite o escopo da integração** — "Faça o deploy disso na Netlify". A Power entra em operação, carregando as ferramentas MCP e o manual `POWER.md`.
+3. **Mude novamente de assunto** — "Adicione um novo modo de jogo". A Power é descarregada, liberando a janela de contexto.
+
+Esse mecanismo diferencia as Powers de conexões MCP comuns, evitando a sobrecarga contínua de ferramentas que não serão usadas naquele momento.
+
+---
+
+## 6.6 — O que Compõe uma Power?
+
+Estruturalmente, cada Power é um diretório contendo:
 
 ```
-my-power/
-├── POWER.md           # Steering: what the tools do, when to use them, best practices
-├── mcp.json           # MCP server configuration (tools + connection details)
-└── steering/          # Optional: additional workflow guides
+minha-power/
+├── POWER.md           # Diretrizes: o que as ferramentas fazem, quando usá-las e boas práticas
+├── mcp.json           # Configuração técnica do MCP (ferramentas e parâmetros de conexão)
+└── steering/          # Opcional: roteiros complementares de fluxo de trabalho
     └── deployment.md
 ```
 
-**POWER.md** is the brain. It tells Kiro:
-
-- What tools are available and what they do
-- When to use each tool
-- Best practices and common pitfalls
-- Workflow sequences ("first create the project, then configure the build, then deploy")
-
-**mcp.json** is the muscle. It defines the MCP server that provides the actual tools.
-
-Together, they give Kiro both the _ability_ and the _knowledge_ to use external services well.
+- **`POWER.md`**: Fornece o discernimento técnico — ensina ao Kiro quando usar cada operação, boas práticas e a ordem correta de execução.
+- **`mcp.json`**: Fornece a capacidade operacional — define o servidor MCP que expõe os métodos de chamada.
 
 ---
 
-## 6.7 — Powers vs Skills vs Steering vs MCP
+## 6.7 — Comparativo: Powers vs Skills vs Steering vs MCP
 
-Now that you've seen all four knowledge systems, here's how they compare:
+Veja como os quatro sistemas de conhecimento se posicionam:
 
-|                    | Powers                   | Skills                        | Steering               | Raw MCP             |
-| ------------------ | ------------------------ | ----------------------------- | ---------------------- | ------------------- |
-| **What**           | Tool bundles + knowledge | Instruction packages          | Project knowledge      | Tool servers        |
-| **Loading**        | Dynamic (keyword)        | On-demand (description match) | Configurable (4 modes) | Always loaded       |
-| **Includes**       | MCP + steering + hooks   | Instructions + scripts        | Markdown guidance      | Tools only          |
-| **External tools** | Yes                      | No                            | No                     | Yes                 |
-| **Best practices** | Bundled                  | Bundled                       | You write them         | Not included        |
-| **Best for**       | Service integrations     | Reusable workflows            | Project conventions    | Custom tool servers |
+| | Powers | Skills | Steering | MCP Manual |
+| :--- | :--- | :--- | :--- | :--- |
+| **Definição** | Ferramentas + conhecimento técnico | Manuais de instrução portáteis | Diretrizes do seu projeto | Servidores de ferramentas |
+| **Carregamento** | Dinâmico (palavras-chave) | Sob demanda (descrição do prompt) | Configurável (4 modos) | Sempre ativo no contexto |
+| **Conteúdo** | MCP + diretrizes + automações | Orientações + scripts de apoio | Documentação em Markdown | Apenas ferramentas técnicas |
+| **Ferramentas Externas** | Sim | Não | Não | Sim |
+| **Boas Práticas** | Embutidas no pacote | Embutidas no pacote | Redigidas por você | Não inclusas |
+| **Cenário Ideal** | Integração com plataformas e nuvem | Metodologias de desenvolvimento | Padrões do repositório | Ferramentas personalizadas |
 
-The mental model: **Steering** is your project wiki. **Skills** are community playbooks. **Powers** are service integrations with built-in expertise. **Raw MCP** is for when you need something custom.
-
----
-
-## 6.8 — Recap
-
-| Kiro Feature           | How you used it                                                 |
-| ---------------------- | --------------------------------------------------------------- |
-| **Powers**             | Installed and used a curated power for deployment/database/etc. |
-| **One-click install**  | Installed a power from the Kiro panel                           |
-| **Dynamic activation** | Saw powers loading/unloading based on conversation context      |
-| **MCP integration**    | Powers configured MCP servers automatically                     |
-| **POWER.md steering**  | Kiro followed best practices bundled with the power             |
-| **Powers ecosystem**   | Browsed the catalog of available powers                         |
+Em resumo: **Steering** é a documentação interna da sua aplicação. **Skills** são os manuais da comunidade. **Powers** são integrações com provedores de nuvem acompanhadas de conhecimento especializado. **MCP Manual** é a solução para integrações customizadas que ainda não possuem pacote pronto.
 
 ---
 
-## Key Takeaway
+## 6.8 — Recapitulação
 
-Powers are the bridge between Kiro and the outside world. They give Kiro access to deployment platforms, databases, observability tools, and more — with the expertise to use them well. And because they load dynamically, you can have dozens installed without slowing anything down.
-
-Going from "I want to deploy this" to "it's deployed" takes minutes, not hours of configuration.
+| Recurso do Kiro | Como você utilizou |
+| :--- | :--- |
+| **Powers** | Instalou e utilizou integrações prontas para deploy, banco de dados ou infra |
+| **Instalação Simplificada** | Instalou recursos com um clique a partir do painel do Kiro |
+| **Ativação Dinâmica** | Acompanhou o carregamento sob demanda baseado nas palavras-chave do chat |
+| **Integração MCP** | As Powers gerenciaram as conexões de ferramentas automaticamente |
+| **Diretrizes POWER.md** | O Kiro seguiu as práticas recomendadas contidas na Power |
+| **Catálogo de Powers** | Explorou o ecossistema de soluções disponíveis |
 
 ---
 
-## What's Next
+## Ponto Principal
 
-You've covered all the major Kiro features: Vibe mode, Specs, Skills, Steering, Hooks, and Powers. Time to wrap up — let's review what you built, what you learned, and where to go from here.
+As Powers conectam o Kiro ao ecossistema externo, garantindo que o agente utilize serviços de nuvem com precisão técnica. Graças ao carregamento sob demanda, você pode dispor de diversas integrações sem comprometer o limite de contexto da sua conversa.
 
-→ [Step 7: MCP and Testing](./7_mcp_and_testing.md) — Set up custom MCP servers and explore property-based testing.
+---
+
+## Próximos Passos
+
+Você já explorou o modo Vibe, Specs, Skills, Steering, Hooks e Powers. No próximo passo, vamos direto para os testes práticos com o **Passo 7: MCP Manual e Testes com Playwright**, operando um navegador real através da IA.
