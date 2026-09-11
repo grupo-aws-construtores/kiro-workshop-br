@@ -1,62 +1,59 @@
-# Kiro Workshop
+# Workshop Kiro
 
-A hands-on workshop that walks you through the full Kiro platform by building, extending, and testing a tic-tac-toe app. You start from an empty folder and a picture, and finish with a full-stack, tested application plus working specs, skills, steering, hooks, powers, and a terminal-based agent workflow.
+Um workshop prático (*hands-on*) que guia você por toda a plataforma Kiro criando, expandindo e testando um aplicativo de jogo da velha (*tic-tac-toe*). Você começa do zero — apenas com uma pasta vazia e uma imagem — e finaliza com uma aplicação full-stack testada, além de especificações (*specs*), *skills*, diretrizes (*steering*), automações (*hooks*), integrações (*powers*) e um fluxo de trabalho com agentes via terminal.
 
-This repository contains the workshop guides. The tic-tac-toe app itself is built during the workshop, using Kiro.
+Este repositório contém os roteiros do workshop. O aplicativo do jogo da velha em si é construído durante o workshop, utilizando o Kiro.
 
-## Prerequisites
+## Pré-requisitos
 
-- [Kiro](https://kiro.dev/download?trk=7fcac8e0-008e-4fe0-8e3d-f72d7381e919&sc_channel=el/) installed (IDE, or the CLI for Step 8)
-- Node.js and npm (for the Vite + React + TypeScript scaffold and the Express backend)
-- A Kiro account signed in (Google, GitHub, Builder ID, or IAM Identity Center)
-- A whiteboard (physical or digital) to sketch out the expected features of the tic-tac-toe game before Step 1. Jot down the board, the X and O markers, turn indicator, win/draw detection, and a reset button. Snap a photo of it, that picture becomes your starting spec in Step 1.
+- [Kiro](https://kiro.dev/download?trk=7fcac8e0-008e-4fe0-8e3d-f72d7381e919&sc_channel=el/) instalado (IDE, ou a CLI para o Passo 8)
+- Node.js e npm instalados (para a base em Vite + React + TypeScript e o backend em Express)
+- Uma conta no Kiro autenticada (via Google, GitHub, Builder ID ou IAM Identity Center)
+- Um quadro branco (físico ou digital) para esboçar as funcionalidades esperadas do jogo da velha antes do Passo 1. Desenhe o tabuleiro, os marcadores X e O, indicador de turno, detecção de vitória/empate e um botão de reiniciar. Tire uma foto dele; essa imagem se tornará sua especificação inicial no Passo 1.
 
-## How to Use
+## Como Usar
 
-Work through the steps in order. Each file in `steps/` is self-contained and ends with a recap and a pointer to the next step.
+Siga os passos em ordem sequencial. Cada arquivo dentro de `steps/` é autocontido e termina com uma recapitulação e o direcionamento para o próximo passo.
 
-Start here: [`steps/1_kicking_things_off.md`](steps/1_kicking_things_off.md)
+Comece por aqui: [`steps/1_kicking_things_off.md`](steps/1_kicking_things_off.md)
 
-## Workshop Steps
+## Passos do Workshop
 
-| #   | Step                                                          | Focus                                                                                                              |
+| #   | Passo                                                         | Foco                                                                                                               |
 | --- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| 1   | [Kicking Things Off](steps/1_kicking_things_off.md)           | Tour the Kiro IDE, use Vibe mode and Autopilot, scaffold a React + Vite + TypeScript tic-tac-toe app from an image |
-| 2   | [Spec-Driven Development](steps/2_spec_driven_development.md) | Create a Spec and move through requirements → design → tasks to add a Node.js + Express backend                    |
-| 3   | [Adding Skills](steps/3_adding_skills.md)                     | Install Anthropic's frontend-design skill and Vercel's React best practices skill, then redesign the UI            |
-| 4   | [Steering](steps/4_steering.md)                               | Generate foundational steering (product, tech, structure), author custom conventions, and use inclusion modes      |
-| 5   | [Hooks](steps/5_hooks.md)                                     | Automate with `fileEdited`, `preToolUse`, and `postTaskExecution` hooks for builds and accessibility review        |
-| 6   | [Powers](steps/6_powers.md)                                   | Install a Power (Netlify, Amplify, Supabase, CDK, or another) and use it for deployment, data, or infra            |
-| 7   | [MCP and Testing](steps/7_mcp_and_testing.md)                 | Configure the Playwright MCP server and have Kiro play and verify the game in a real browser                       |
-| 8   | [Kiro CLI](steps/8_kiro_cli.md)                               | Use Kiro from the terminal: interactive chat, shell translation, sessions, custom agents, and MCP management       |
+| 1   | [Dando o Pontapé Inicial](steps/1_kicking_things_off.md)       | Tour pela IDE do Kiro, uso do modo Vibe e Autopilot, estruturação (*scaffold*) do app React + Vite + TS a partir de uma imagem |
+| 2   | [Desenvolvimento Orientado a Especificações](steps/2_spec_driven_development.md) | Criar uma Spec e navegar pelo fluxo de requisitos → design → tarefas para adicionar backend em Node.js + Express  |
+| 3   | [Adicionando Skills](steps/3_adding_skills.md)                | Instalar a *skill* de design frontend da Anthropic e de boas práticas em React da Vercel para redesenhar a interface |
+| 4   | [Steering (Diretrizes e Convenções)](steps/4_steering.md)     | Gerar diretrizes essenciais (produto, tecnologia, estrutura), definir convenções customizadas e modos de inclusão  |
+| 5   | [Hooks (Automações)](steps/5_hooks.md)                        | Automatizar rotinas com hooks `fileEdited`, `preToolUse` e `postTaskExecution` para builds e revisão de acessibilidade |
+| 6   | [Powers (Integrações e Infra)](steps/6_powers.md)              | Instalar uma Power (Netlify, Amplify, Supabase, CDK ou outra) para deploy, dados ou infraestrutura                 |
+| 7   | [MCP e Testes Automatizados](steps/7_mcp_and_testing.md)      | Configurar o servidor MCP do Playwright e fazer o Kiro jogar e validar a aplicação em um navegador real            |
+| 8   | [Kiro CLI (Linha de Comando)](steps/8_kiro_cli.md)            | Operar o Kiro pelo terminal: chat interativo, tradução de comandos shell, sessões, agentes customizados e gestão de MCP |
 
-## What You Will Build
+## O que Você Vai Construir
 
-By the end of the workshop you will have:
+Ao término do workshop, você terá:
 
-- A tic-tac-toe web app (React + Vite + TypeScript) scaffolded from an image
-- A Node.js + Express backend with game results, leaderboard, and history endpoints
-- A Kiro Spec in `.kiro/specs/` documenting requirements, design, and tasks
-- Steering files in `.kiro/steering/` encoding your project conventions
-- Hooks in `.kiro/hooks/` automating builds and reviews
-- An installed Power (or more) for deployment or data
-- The Playwright MCP server configured in `.kiro/settings/mcp.json` for browser testing
+- Um aplicativo web de jogo da velha (React + Vite + TypeScript) gerado a partir de uma imagem
+- Um backend em Node.js + Express com endpoints para resultados de partidas, placar (*leaderboard*) e histórico
+- Uma especificação do Kiro em `.kiro/specs/` documentando requisitos, design e tarefas
+- Arquivos de diretrizes em `.kiro/steering/` definindo as convenções técnicas do seu projeto
+- Automações em `.kiro/hooks/` executando builds e validações de código
+- Uma ou mais *Powers* instaladas para deploy ou banco de dados
+- O servidor MCP do Playwright configurado em `.kiro/settings/mcp.json` para testes automatizados no navegador
 
-## Repository Layout
+## Estrutura do Repositório
 
-```
-.
 ├── README.md
 ├── .gitignore
 └── steps/
-    ├── 1_kicking_things_off.md
-    ├── 2_spec_driven_development.md
-    ├── 3_adding_skills.md
-    ├── 4_steering.md
-    ├── 5_hooks.md
-    ├── 6_powers.md
-    ├── 7_mcp_and_testing.md
-    └── 8_kiro_cli.md
-```
+├── 1_kicking_things_off.md
+├── 2_spec_driven_development.md
+├── 3_adding_skills.md
+├── 4_steering.md
+├── 5_hooks.md
+├── 6_powers.md
+├── 7_mcp_and_testing.md
+└── 8_kiro_cli.md
 
-Generated files produced during the workshop (`node_modules/`, `dist/`, `.vite/`, `.playwright-mcp/`, etc.) are already covered by `.gitignore`.
+Arquivos e pastas gerados durante a execução do workshop (`node_modules/`, `dist/`, `.vite/`, `.playwright-mcp/`, etc.) já estão cobertos pelo `.gitignore`.
