@@ -1,83 +1,83 @@
-# Step 4 — Steering
+# Passo 4 — Steering (Diretrizes e Convenções)
 
-> **Goal:** Teach Kiro about your project's conventions using Steering files. Generate foundational docs, create custom steering for your API and component patterns, and see how inclusion modes control when context loads.
-
----
-
-## 4.1 — Why Steering?
-
-In Step 3 you installed Skills — general knowledge from the community (design principles, React patterns). Skills are great, but they don't know anything about _your_ project.
-
-Steering fills that gap. It's how you teach Kiro:
-
-- What tech stack you're using and why
-- How your project is organized
-- What coding conventions your team follows
-- How your API endpoints should be structured
-- What patterns to use (and what to avoid)
-
-Without steering, every new chat session starts from scratch — you'd have to re-explain your conventions each time. With steering, Kiro remembers. It's like onboarding a new teammate who actually reads the wiki.
+> **Objetivo:** Ensinar ao Kiro as convenções do seu projeto utilizando arquivos de Steering. Gerar documentos fundamentais, criar diretrizes personalizadas para sua API e padrões de componentes, e entender como os modos de inclusão controlam o carregamento de contexto.
 
 ---
 
-## 4.2 — Where Steering Files Live
+## 4.1 — Por que usar Steering?
 
-Steering files are markdown files stored in specific locations:
+No Passo 3 você instalou Skills — conhecimentos gerais compartilhados pela comunidade (design de interface e regras de performance em React). Skills são excelentes, mas não conhecem nada sobre as particularidades do *seu* projeto.
 
-| Scope         | Location            | Applies to        |
-| ------------- | ------------------- | ----------------- |
-| **Workspace** | `.kiro/steering/`   | This project only |
-| **Global**    | `~/.kiro/steering/` | All your projects |
+O Steering preenche essa lacuna. É por meio dele que você documenta para o Kiro:
 
-Workspace steering takes priority over global steering if they conflict. This lets you set global defaults ("I always use TypeScript") while overriding per-project ("this project uses Tailwind, not CSS modules").
+- Qual stack tecnológica está sendo utilizada e as razões da escolha
+- Como os arquivos do projeto estão distribuídos
+- Quais regras de codificação a sua equipe adota
+- Como os endpoints da sua API devem ser padronizados
+- Quais padrões devem ser seguidos (e o que deve ser evitado)
 
----
-
-## 4.3 — Generating Foundational Steering Files
-
-Kiro can auto-generate three foundational files that capture the basics of your project. Let's do that now.
-
-### How to generate them
-
-1. Open the **Steering** section in the Kiro panel (left sidebar)
-2. Click the **Generate Steering Docs** button (or click `+` → **Protect steering files**)
-3. Kiro analyzes your codebase and generates three files
-
-### The three foundational files
-
-**`product.md`** — What this project is about
-
-Kiro will describe the tic-tac-toe game: its purpose, target users, key features (game board, leaderboard, game history), and the fact that it's a workshop demo project.
-
-**`tech.md`** — The technology stack
-
-Kiro will document: React + Vite + TypeScript for the frontend, Node.js + Express for the backend, in-memory data store, and any libraries it installed during the build.
-
-**`structure.md`** — How the project is organized
-
-Kiro will map out the file structure: where components live, where API routes are defined, where styles go, and the naming conventions already in use.
-
-### What to notice
-
-- Kiro didn't just list files — it understood the _architecture_. It knows the frontend and backend are separate, it knows which components handle game logic vs display.
-- These files are **always included** by default — every future chat session will have this context automatically.
-- You can (and should) edit them. If Kiro got something wrong or missed a convention, fix it. These are your docs.
+Sem o Steering, cada conversa no chat começa como uma folha em branco — exigindo que você relembre suas preferências repetidamente. Com o Steering configurado, o Kiro mantém a memória do projeto ativa. É o equivalente a integrar um desenvolvedor na equipe que realmente lê a documentação técnica antes de escrever código.
 
 ---
 
-## 4.4 — Creating Custom Steering Files
+## 4.2 — Onde os Arquivos de Steering Ficam Armazenados
 
-Foundational files cover the basics. Custom steering files let you encode specific conventions. Let's create two.
+Os arquivos de Steering são documentos Markdown salvos em diretórios dedicados:
 
-### Custom file 1: API conventions
+| Escopo | Localização | Aplica-se a |
+| :--- | :--- | :--- |
+| **Workspace** | `.kiro/steering/` | Apenas a este projeto |
+| **Global** | `~/.kiro/steering/` | A todos os seus projetos |
 
-Create a new steering file for your backend API patterns.
+O Steering do workspace tem precedência sobre o global em caso de regras conflitantes. Isso permite que você tenha padrões globais ("sempre usar TypeScript") e personalize regras por repositório ("este projeto adota Tailwind em vez de CSS Modules").
 
-1. In the Steering section, click `+`
-2. Choose **Workspace** scope
-3. Name it `api-conventions.md`
+---
 
-Write something like:
+## 4.3 — Gerando Arquivos de Steering Fundamentais
+
+O Kiro pode mapear e gerar automaticamente três arquivos essenciais que descrevem o seu repositório. Vamos gerá-los agora:
+
+### Como gerar
+
+1. Abra a seção **Steering** no painel lateral do Kiro.
+2. Clique no botão **Generate Steering Docs** (ou clique em `+` → **Protect steering files**).
+3. O Kiro analisa o código-fonte da aplicação e gera três documentos fundamentais.
+
+### Os três arquivos fundamentais
+
+**`product.md`** — A proposta do projeto
+
+O Kiro documenta a visão geral do jogo da velha: seu objetivo, público-alvo, funcionalidades centrais (tabuleiro, placar de líderes e histórico de partidas) e o contexto de ser um projeto prático para workshops.
+
+**`tech.md`** — A stack de tecnologias
+
+O Kiro lista as definições técnicas: React + Vite + TypeScript no frontend, Node.js + Express no backend, persistência em memória e as dependências instaladas durante o processo.
+
+**`structure.md`** — A organização dos diretórios
+
+O Kiro mapeia a arquitetura de pastas: localização de componentes, definição de rotas de API, organização das folhas de estilo e convenções de nomenclatura adotadas.
+
+### Pontos para prestar atenção
+
+- O Kiro compreende a *arquitetura* do projeto, reconhecendo o isolamento entre backend e frontend e separando componentes de interface daqueles com regras de negócio.
+- Esses arquivos vêm com a política de inclusão padrão **sempre ativos (*always*)** — fornecendo contexto prévio em qualquer conversa futura.
+- Eles são totalmente editáveis: caso algo precise de ajustes ou você queira incluir novas regras de arquitetura, altere o arquivo diretamente.
+
+---
+
+## 4.4 — Criando Arquivos de Steering Personalizados
+
+Os documentos fundamentais estabelecem a base. Com arquivos personalizados, você define convenções técnicas detalhadas. Vamos criar dois exemplos.
+
+### Arquivo personalizado 1: Convenções de API
+
+Crie um arquivo para orientar o desenvolvimento de rotas da sua API backend:
+
+1. Na seção Steering, clique no ícone `+`.
+2. Selecione o escopo **Workspace**.
+3. Defina o nome como `api-conventions.md`.
+
+Insira o conteúdo a seguir:
 
 ````markdown
 ---
@@ -85,51 +85,56 @@ inclusion: fileMatch
 fileMatchPattern: "server/**/*.ts"
 ---
 
-# API Conventions
+# Convenções de API
 
-## Endpoint structure
+## Estrutura de Endpoints
 
-- All endpoints are prefixed with `/api/v1/`
-- Use plural nouns for resources: `/api/v1/games`, `/api/v1/players`
-- Use HTTP methods correctly: GET for reads, POST for creates, PUT for updates, DELETE for deletes
+- Todos os endpoints devem utilizar o prefixo `/api/v1/`
+- Utilize substantivos no plural para identificar recursos: `/api/v1/games`, `/api/v1/players`
+- Siga estritamente os métodos HTTP: GET para leituras, POST para criação, PUT para atualizações e DELETE para remoção
 
-## Response format
+## Formato Padrão de Resposta
 
-All API responses follow this shape:
+Todas as respostas da API devem seguir este contrato JSON:
 
-\```json
+```json
 {
-"success": true,
-"data": { ... },
-"error": null
+  "success": true,
+  "data": { ... },
+  "error": null
 }
-\```
+```
 
-On error:
+Em cenários de erro:
 
-\```json
+```json
 {
-"success": false,
-"data": null,
-"error": { "code": "NOT_FOUND", "message": "Game not found" }
+  "success": false,
+  "data": null,
+  "error": { "code": "NOT_FOUND", "message": "Partida não encontrada" }
 }
-\```
+```
 
-## Error handling
+## Tratamento de Falhas
 
-- Always return appropriate HTTP status codes (200, 201, 400, 404, 500)
-- Never expose internal error details to the client
-- Log errors server-side with timestamps
+- Retorne os códigos de status HTTP correspondentes (200, 201, 400, 404, 500)
+- Nunca exponha detalhes internos ou stack traces do servidor para o cliente
+- Registre erros no console do servidor com timestamp legível
 
-## Naming
+## Nomenclatura
 
-- Route files: `<resource>.routes.ts`
-- Handler functions: `get<Resource>`, `create<Resource>`, `update<Resource>`
+- Arquivos de rotas: `<recurso>.routes.ts`
+- Funções manipuladoras (*handlers*): `get<Recurso>`, `create<Recurso>`, `update<Recurso>`
 ````
 
-### Custom file 2: Component patterns
+### Arquivo personalizado 2: Padrões de Componentes
 
-Create another for your React component conventions:
+Crie um segundo arquivo para padronizar os componentes React:
+
+1. Na seção Steering, clique em `+`.
+2. Escolha **Workspace** e nomeie como `component-conventions.md`.
+
+Adicione o conteúdo:
 
 ```markdown
 ---
@@ -137,41 +142,41 @@ inclusion: fileMatch
 fileMatchPattern: ["src/components/**/*.tsx", "src/components/**/*.ts"]
 ---
 
-# Component Conventions
+# Padrões de Componentes React
 
-## File structure
+## Estrutura de Arquivos
 
-- One component per file
-- Component file name matches the export: `GameBoard.tsx` exports `GameBoard`
-- Co-locate styles with components: `GameBoard.tsx` + `GameBoard.css`
+- Mantenha apenas um componente por arquivo
+- O nome do arquivo deve corresponder ao componente exportado: `GameBoard.tsx` exporta `GameBoard`
+- Aloque as folhas de estilo junto com o componente correspondente: `GameBoard.tsx` + `GameBoard.css`
 
-## Component patterns
+## Padrões de Código
 
-- Use functional components with hooks (no class components)
-- Props interface named `<Component>Props`: `GameBoardProps`
-- Destructure props in the function signature
-- Keep components focused — if it's doing too much, split it
+- Utilize exclusivamente componentes funcionais com hooks (sem classes)
+- Nomeie as interfaces de propriedades como `<Componente>Props`: `GameBoardProps`
+- Desestruture as propriedades diretamente na assinatura da função
+- Mantenha componentes concisos — se acumular muitas responsabilidades, fatore-o em componentes menores
 
-## State management
+## Gerenciamento de Estado
 
-- Use `useState` for local component state
-- Lift state up to the nearest common ancestor when shared
-- Use functional setState when the new value depends on the previous value
+- Utilize `useState` para controle de estado puramente local
+- Eleve o estado (*lift state*) para o componente pai comum mais próximo ao compartilhar dados
+- Prefira a forma funcional do `setState` sempre que o novo valor depender do valor anterior
 
-## Accessibility
+## Acessibilidade
 
-- All interactive elements must have accessible labels
-- Use semantic HTML elements (button, nav, main, section)
-- Ensure keyboard navigation works for all game interactions
+- Elementos interativos devem conter rótulos descritivos (*aria-labels*)
+- Utilize tags HTML semânticas (`<button>`, `<nav>`, `<main>`, `<section>`)
+- Assegure navegação completa por teclado em todas as ações de jogo
 ```
 
 ---
 
-## 4.5 — Inclusion Modes Explained
+## 4.5 — Modos de Inclusão Explicados
 
-Notice the `inclusion` and `fileMatchPattern` in the front matter above. Steering files support four inclusion modes that control _when_ they load into context:
+Observe os parâmetros `inclusion` e `fileMatchPattern` no cabeçalho (*frontmatter*) dos exemplos acima. O Steering permite quatro estratégias de carregamento para otimizar o uso do contexto:
 
-### Always (default)
+### Sempre Ativo (`always` - padrão)
 
 ```yaml
 ---
@@ -179,9 +184,9 @@ inclusion: always
 ---
 ```
 
-Loaded in every single interaction. Use for core standards that apply everywhere — like the foundational files.
+O arquivo é injetado em toda e qualquer interação. Recomendado para visões gerais de arquitetura e padrões corporativos indispensáveis (como os arquivos fundamentais).
 
-### Conditional (fileMatch)
+### Condicional (`fileMatch`)
 
 ```yaml
 ---
@@ -190,9 +195,9 @@ fileMatchPattern: "server/**/*.ts"
 ---
 ```
 
-Loaded only when you're working with files that match the pattern. Your API conventions file only loads when you're touching backend code — no point cluttering context when you're working on the frontend.
+O arquivo é carregado apenas quando você estiver trabalhando em arquivos que correspondam ao padrão informado. O manual de rotas da API só entrará no contexto quando você estiver editando o backend — sem poluir a memória quando estiver mexendo no CSS do frontend.
 
-### Manual
+### Manual (`manual`)
 
 ```yaml
 ---
@@ -200,102 +205,102 @@ inclusion: manual
 ---
 ```
 
-Available on-demand by typing `#steering-name` in chat or selecting it from the `/` slash command menu. Use for specialized guides you only need occasionally — like a deployment checklist or migration procedure.
+Disponível sob demanda: você pode chamá-lo no chat digitando `#nome-do-steering` ou selecionando-o pelo menu de comandos `/`. Indicado para procedimentos esporádicos, como manuais de deploy ou rotinas de migração de dados.
 
-### Auto
+### Automático (`auto`)
 
 ```yaml
 ---
 inclusion: auto
-name: game-balance
-description: Guidelines for game balance and fairness. Use when modifying game logic or win conditions.
+name: equilibrio-do-jogo
+description: Diretrizes sobre regras e balanceamento de partidas. Utilize ao alterar a lógica de turnos ou critérios de vitória.
 ---
 ```
 
-Loaded automatically when your request matches the description. Similar to how Skills work — Kiro reads the description and decides if it's relevant.
+Injetado de forma dinâmica sempre que a sua mensagem tiver relação semântica com a descrição informada — funcionando de maneira similar às Skills.
 
-### Why this matters
+### Por que isso é relevante?
 
-Without inclusion modes, every steering file loads into every conversation. That works fine with 3 files, but a real project might have 10–15 steering files covering API design, testing patterns, deployment, security, accessibility, and more. Inclusion modes keep context focused — Kiro only loads what's relevant to the current task.
-
----
-
-## 4.6 — See It in Action
-
-Now let's prove steering works. Open a Vibe chat and ask Kiro to add a new API endpoint:
-
-```
-Add a new endpoint to get a single game by ID.
-Follow the existing API conventions.
-```
-
-### What to watch for
-
-Because the `api-conventions.md` steering file has `fileMatch` on `server/**/*.ts`, it will load automatically when Kiro starts editing backend files. You should see Kiro:
-
-- Use the `/api/v1/games/:id` URL pattern (not `/game/:id` or `/getGame`)
-- Return the standard `{ success, data, error }` response shape
-- Name the handler `getGame` (following the `get<Resource>` convention)
-- Use proper HTTP status codes (200 for found, 404 for not found)
-- Name the file following the existing pattern
-
-If Kiro _doesn't_ follow a convention, that's actually a great teaching moment — update the steering file to be more specific and try again.
+Sem políticas de inclusão, todos os manuais técnicos seriam anexados a todas as mensagens. Em um sistema com 15 documentos cobrindo testes, deploy, segurança e acessibilidade, a janela de contexto se esgotaria rapidamente. Os modos de inclusão mantêm o contexto limpo e relevante para a tarefa atual.
 
 ---
 
-## 4.7 — File References
+## 4.6 — Veja as Diretrizes em Ação
 
-Steering files can reference other files in your workspace using a special syntax:
+Vamos validar o funcionamento do Steering na prática. Abra uma conversa no modo Vibe e solicite a criação de uma rota:
+
+```text
+Adicione um novo endpoint para consultar uma partida específica pelo seu identificador (ID).
+Siga rigorosamente as convenções de API estabelecidas.
+```
+
+### O que observar
+
+Como o arquivo `api-conventions.md` está configurado com `fileMatch` para a rota `server/**/*.ts`, ele é incluído automaticamente assim que o Kiro manipula o backend. Você verá o Kiro:
+
+- Definir a rota no padrão `/api/v1/games/:id` (evitando URLs não padronizadas como `/getGame`)
+- Retornar o JSON na estrutura padrão `{ success, data, error }`
+- Nomear a função como `getGame` (seguindo a regra `get<Recurso>`)
+- Empregar os códigos HTTP corretos (200 para sucesso e 404 caso não localize)
+- Salvar o arquivo respeitando a padronização existente
+
+Se o Kiro não seguir alguma regra, isso representa uma oportunidade de melhoria: torne a instrução no arquivo de Steering mais objetiva e repita o teste.
+
+---
+
+## 4.7 — Referências Cruzadas de Arquivos
+
+Arquivos de Steering podem referenciar outros arquivos do seu workspace usando uma sintaxe especial:
 
 ```markdown
 #[[file:api/openapi.yaml]]
 ```
 
-This tells Kiro to pull in the contents of that file when the steering file loads. Useful for:
+Isso instrui o Kiro a carregar o conteúdo daquele arquivo referenciado junto com o documento de Steering. É muito útil para:
 
-- Linking to an OpenAPI spec so Kiro follows your API contract
-- Referencing a component as a "template" for new components
-- Pointing to config files that define project constraints
+- Apontar um contrato OpenAPI para que as rotas sigam a especificação
+- Indicar um componente como modelo de referência para criação de novos componentes
+- Conectar arquivos de configuração com parâmetros do projeto
 
-For example, you could add to your API conventions file:
+Exemplo de uso dentro de `api-conventions.md`:
 
 ```markdown
-Reference the existing game routes for patterns: #[[file:server/routes/games.routes.ts]]
+Consulte o arquivo existente de rotas como exemplo de padrão: #[[file:server/routes/games.routes.ts]]
 ```
 
-Now Kiro will see the actual code alongside the conventions — making it much more likely to match the existing style.
+Dessa forma, o Kiro visualiza tanto as regras quanto um exemplo prático de implementação no mesmo contexto.
 
 ---
 
-## 4.8 — AGENTS.md Support
+## 4.8 — Suporte ao Padrão AGENTS.md
 
-Quick note: Kiro also supports the `AGENTS.md` standard. If you already have an `AGENTS.md` file in your repo root (common if you use Claude Code or other tools), Kiro picks it up automatically. It's always included, no front matter needed.
+Nota relevante: o Kiro suporta nativamente a especificação aberta `AGENTS.md`. Caso você já utilize um arquivo `AGENTS.md` na raiz do seu repositório (comum em fluxos com Claude Code ou outros agentes), o Kiro o reconhece e o carrega de forma contínua, sem necessidade de configurações adicionais.
 
-This means your steering setup can work across multiple AI tools — `AGENTS.md` for cross-tool conventions, `.kiro/steering/` for Kiro-specific guidance.
-
----
-
-## 4.9 — Recap
-
-| Kiro Feature              | How you used it                                                   |
-| ------------------------- | ----------------------------------------------------------------- |
-| **Foundational steering** | Auto-generated product.md, tech.md, and structure.md              |
-| **Custom steering files** | Created API conventions and component patterns                    |
-| **Inclusion modes**       | Used `always` (foundational) and `fileMatch` (conditional)        |
-| **File references**       | Linked to workspace files from steering docs                      |
-| **AGENTS.md**             | Mentioned cross-tool compatibility                                |
-| **Steering in action**    | Added an API endpoint that followed your conventions automatically|
+Isso viabiliza manter convenções unificadas entre múltiplas ferramentas de IA — usando `AGENTS.md` para padrões gerais e `.kiro/steering/` para fluxos específicos do Kiro.
 
 ---
 
-## Key Takeaway
+## 4.9 — Recapitulação
 
-Skills give Kiro general expertise. Steering gives Kiro _your_ expertise. Together, they mean Kiro writes code that's not just technically good — it's good _for your project_, following your patterns, your naming, your architecture.
-
-The foundational files take 30 seconds to generate. Custom steering files take a few minutes to write. The payoff is every future interaction being more accurate and consistent.
+| Recurso do Kiro | Como você utilizou |
+| :--- | :--- |
+| **Steering Fundamental** | Gerou automaticamente os documentos product.md, tech.md e structure.md |
+| **Arquivos Personalizados** | Escreveu regras para a API e padronizou o desenvolvimento em React |
+| **Modos de Inclusão** | Configurou políticas `always` (geral) e `fileMatch` (condicional por arquivos) |
+| **Referências a Arquivos** | Vinculou trechos de código do projeto diretamente dentro das instruções |
+| **AGENTS.md** | Identificou a compatibilidade com o padrão aberto entre agentes |
+| **Steering na Prática** | Criou um novo endpoint que seguiu os padrões arquiteturais de forma automática |
 
 ---
 
-## What's Next
+## Ponto Principal
 
-You've taught Kiro how your project works. In the next step, you'll automate things with **Hooks** — setting up triggers that fire automatically when you save files, run tools, or complete tasks.
+As Skills fornecem ao Kiro conhecimento técnico geral. O Steering ensina as diretrizes específicas da *sua* aplicação. Em conjunto, garantem que a IA entregue código tecnicamente consistente e integrado à arquitetura do seu projeto.
+
+Os arquivos fundamentais são gerados em segundos, e redigir regras personalizadas leva poucos minutos. O ganho é ter todas as próximas implementações alinhadas às suas convenções de forma automática.
+
+---
+
+## Próximos Passos
+
+Você já estabeleceu a documentação técnica do projeto com o Steering. No próximo passo, você implementará automações com **Hooks** — configurando gatilhos automáticos disparados ao salvar arquivos, usar ferramentas ou finalizar tarefas de desenvolvimento.
